@@ -5,7 +5,6 @@ import "./AdminDashboard.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
-/* ─── HELPERS ─── */
 const SECTIONS = [
   "hero",
   "stats",
@@ -24,7 +23,6 @@ const SECTION_LABELS = {
   testimonials: "💬 Testimonials",
   promo: "🎯 Promo Banner",
 };
-
 const TAG_OPTIONS = ["hot", "new", "sale"];
 
 /* ─── IMAGE UPLOADER ─── */
@@ -32,8 +30,6 @@ function ImageUploader({ value, onChange }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef(null);
-
-  // Resolve full URL for preview (handles both /uploads/... and full https://...)
   const previewSrc = value
     ? value.startsWith("http")
       ? value
@@ -65,20 +61,10 @@ function ImageUploader({ value, onChange }) {
     }
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  };
-
-  const handleClear = () => onChange("");
-
   return (
     <div className="ad-field ad-field--full">
       <label className="ad-field__label">Product Image</label>
-
       {previewSrc ? (
-        /* ── Preview mode ── */
         <div className="ad-img-preview">
           <img src={previewSrc} alt="Product" className="ad-img-preview__img" />
           <div className="ad-img-preview__actions">
@@ -90,18 +76,20 @@ function ImageUploader({ value, onChange }) {
             </button>
             <button
               className="ad-btn ad-btn--sm ad-btn--danger-ghost"
-              onClick={handleClear}
+              onClick={() => onChange("")}
             >
               🗑️ Remove
             </button>
           </div>
         </div>
       ) : (
-        /* ── Drop zone ── */
         <div
           className={`ad-dropzone ${uploading ? "ad-dropzone--loading" : ""}`}
           onClick={() => inputRef.current.click()}
-          onDrop={handleDrop}
+          onDrop={(e) => {
+            e.preventDefault();
+            handleFile(e.dataTransfer.files[0]);
+          }}
           onDragOver={(e) => e.preventDefault()}
           onDragEnter={(e) =>
             e.currentTarget.classList.add("ad-dropzone--over")
@@ -125,9 +113,7 @@ function ImageUploader({ value, onChange }) {
           )}
         </div>
       )}
-
       {error && <div className="ad-field__error">{error}</div>}
-
       <input
         ref={inputRef}
         type="file"
@@ -139,6 +125,7 @@ function ImageUploader({ value, onChange }) {
   );
 }
 
+/* ─── FIELD ─── */
 function Field({ label, value, onChange, type = "text", rows }) {
   return (
     <div className="ad-field">
@@ -162,6 +149,7 @@ function Field({ label, value, onChange, type = "text", rows }) {
   );
 }
 
+/* ─── SAVE BAR ─── */
 function SaveBar({ saving, onSave, onCancel, dirty }) {
   return dirty ? (
     <div className="ad-savebar">
@@ -182,22 +170,19 @@ function SaveBar({ saving, onSave, onCancel, dirty }) {
   ) : null;
 }
 
+/* ─── TOAST ─── */
 function Toast({ msg, type }) {
   return msg ? <div className={`ad-toast ad-toast--${type}`}>{msg}</div> : null;
 }
 
-/* ════════════════════════════════════════════
-   HERO EDITOR
-   ════════════════════════════════════════════ */
+/* ─── HERO EDITOR ─── */
 function HeroEditor({ showToast }) {
   const { content, updateSection, saving } = useSite();
   const [draft, setDraft] = useState(null);
   const current = draft ?? content.hero;
   const dirty = draft !== null;
-
   const set = (key) => (val) =>
     setDraft((d) => ({ ...(d ?? content.hero), [key]: val }));
-
   const handleSave = async () => {
     await updateSection("hero", draft);
     setDraft(null);
@@ -249,32 +234,24 @@ function HeroEditor({ showToast }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   PROMO EDITOR
-   ════════════════════════════════════════════ */
+/* ─── PROMO EDITOR ─── */
 function PromoEditor({ showToast }) {
   const { content, updateSection, saving } = useSite();
   const [draft, setDraft] = useState(null);
   const current = draft ?? content.promo;
   const dirty = draft !== null;
-
   const set = (key) => (val) =>
     setDraft((d) => ({ ...(d ?? content.promo), [key]: val }));
-
   const handleSave = async () => {
     await updateSection("promo", draft);
     setDraft(null);
-    showToast("Promo banner saved!", "success");
+    showToast("Promo saved!", "success");
   };
 
   return (
     <div className="ad-editor">
       <div className="ad-editor__grid ad-editor__grid--2">
-        <Field
-          label="Label (small text)"
-          value={current.label}
-          onChange={set("label")}
-        />
+        <Field label="Label" value={current.label} onChange={set("label")} />
         <Field
           label="Discount number"
           value={current.bigNum}
@@ -300,13 +277,10 @@ function PromoEditor({ showToast }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   GENERIC ARRAY EDITOR (stats, features, categories, testimonials)
-   ════════════════════════════════════════════ */
+/* ─── ARRAY EDITOR ─── */
 function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
   const { content, addItem, updateItem, deleteItem, saving } = useSite();
   const items = content[section] || [];
-
   const [editId, setEditId] = useState(null);
   const [draft, setDraft] = useState({});
   const [adding, setAdding] = useState(false);
@@ -328,14 +302,12 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
     setDraft({});
     showToast("Updated!", "success");
   };
-
   const handleAdd = async () => {
     await addItem(section, newItem);
     setNewItem(newItemDefaults);
     setAdding(false);
     showToast("Added!", "success");
   };
-
   const handleDelete = async (id) => {
     await deleteItem(section, id);
     setConfirm(null);
@@ -344,7 +316,6 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
 
   return (
     <div className="ad-editor">
-      {/* Item list */}
       <div className="ad-list">
         {items.map((item) => (
           <div
@@ -352,9 +323,7 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
             className={`ad-list__item ${editId === item._id ? "ad-list__item--editing" : ""}`}
           >
             {editId === item._id ? (
-              /* ── Inline edit form ── */
               <div className="ad-list__edit-form">
-                {/* Image uploader for products */}
                 {section === "products" && (
                   <ImageUploader
                     value={draft.image ?? ""}
@@ -377,7 +346,6 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
                       />
                     ))}
                 </div>
-                {/* Tag select for products */}
                 {section === "products" && (
                   <div className="ad-field">
                     <label className="ad-field__label">Tag type</label>
@@ -410,7 +378,6 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
                 </div>
               </div>
             ) : (
-              /* ── Read view ── */
               <div className="ad-list__row">
                 <div className="ad-list__preview">
                   {item.image ? (
@@ -481,11 +448,9 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
         ))}
       </div>
 
-      {/* Add new */}
       {adding ? (
         <div className="ad-add-form">
           <div className="ad-add-form__title">Add new item</div>
-          {/* Image uploader for products */}
           {section === "products" && (
             <ImageUploader
               value={newItem.image ?? ""}
@@ -554,9 +519,7 @@ function ArrayEditor({ section, fields, showToast, newItemDefaults }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION CONFIGS
-   ════════════════════════════════════════════ */
+/* ─── SECTION CONFIGS ─── */
 const SECTION_CONFIG = {
   stats: {
     fields: [
@@ -577,7 +540,7 @@ const SECTION_CONFIG = {
     fields: [
       { key: "emoji", label: "Emoji" },
       { key: "name", label: "Name" },
-      { key: "count", label: "Count (e.g. 5,000 products)" },
+      { key: "count", label: "Count" },
     ],
     defaults: { emoji: "📦", name: "", count: "" },
   },
@@ -627,7 +590,7 @@ const SECTION_CONFIG = {
    ROOT DASHBOARD
    ════════════════════════════════════════════ */
 export default function AdminDashboard() {
-  const { loading, error } = useSite();
+  const { content, loading, error } = useSite();
   const { user, logout } = useAuth();
   const [activeSection, setActiveSection] = useState("hero");
   const [toast, setToast] = useState({ msg: "", type: "success" });
@@ -645,30 +608,9 @@ export default function AdminDashboard() {
     setTimeout(() => setToast({ msg: "", type: "success" }), 3000);
   };
 
-  if (loading)
-    return (
-      <div className="ad-loading">
-        <div className="ad-loading__spinner" />
-        <p>Loading content from MongoDB…</p>
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="ad-error">
-        <div className="ad-error__icon">⚠️</div>
-        <h2>Could not connect to server</h2>
-        <p>{error}</p>
-        <p className="ad-error__hint">
-          Make sure your Express server is running on{" "}
-          <code>http://localhost:5000</code>
-        </p>
-      </div>
-    );
-
   return (
     <div className="ad-root">
-      {/* Sidebar */}
+      {/* ── SIDEBAR — always renders immediately ── */}
       <aside className="ad-sidebar">
         <div className="ad-sidebar__brand">
           <span className="ad-sidebar__bee">🐝</span>
@@ -723,6 +665,9 @@ export default function AdminDashboard() {
           <a href="/admin/currencies" className="ad-sidebar__ext-link">
             💱 Currencies
           </a>
+          <a href="/pos" className="ad-sidebar__ext-link">
+            🖥️ POS Terminal
+          </a>
         </div>
 
         <a
@@ -735,7 +680,7 @@ export default function AdminDashboard() {
         </a>
       </aside>
 
-      {/* Main */}
+      {/* ── MAIN ── */}
       <main className="ad-main">
         <div className="ad-main__header">
           <div>
@@ -747,7 +692,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ── Low stock alert ── */}
+        {/* Low stock alert */}
         {lowStock.length > 0 && (
           <div className="ad-low-stock-alert">
             <div className="ad-low-stock-alert__header">
@@ -792,21 +737,48 @@ export default function AdminDashboard() {
         )}
 
         <div className="ad-main__body">
-          {activeSection === "hero" && <HeroEditor showToast={showToast} />}
-          {activeSection === "promo" && <PromoEditor showToast={showToast} />}
-          {[
-            "stats",
-            "features",
-            "categories",
-            "products",
-            "testimonials",
-          ].includes(activeSection) && (
-            <ArrayEditor
-              section={activeSection}
-              fields={SECTION_CONFIG[activeSection].fields}
-              newItemDefaults={SECTION_CONFIG[activeSection].defaults}
-              showToast={showToast}
-            />
+          {/* Loading — only in content area, not full page */}
+          {loading && (
+            <div className="ad-loading">
+              <div className="ad-loading__spinner" />
+              <p>Loading content…</p>
+            </div>
+          )}
+
+          {/* Error — only in content area */}
+          {!loading && error && (
+            <div className="ad-error">
+              <div className="ad-error__icon">⚠️</div>
+              <h2>Could not load content</h2>
+              <p>{error}</p>
+              <p className="ad-error__hint">
+                Check that <code>{API_BASE}/api/content</code> is reachable.
+              </p>
+            </div>
+          )}
+
+          {/* Content editors — only when loaded successfully */}
+          {!loading && !error && content && (
+            <>
+              {activeSection === "hero" && <HeroEditor showToast={showToast} />}
+              {activeSection === "promo" && (
+                <PromoEditor showToast={showToast} />
+              )}
+              {[
+                "stats",
+                "features",
+                "categories",
+                "products",
+                "testimonials",
+              ].includes(activeSection) && (
+                <ArrayEditor
+                  section={activeSection}
+                  fields={SECTION_CONFIG[activeSection].fields}
+                  newItemDefaults={SECTION_CONFIG[activeSection].defaults}
+                  showToast={showToast}
+                />
+              )}
+            </>
           )}
         </div>
       </main>
