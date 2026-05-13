@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SiteProvider } from "./components/LandingPage/SiteContext";
 import { AuthProvider } from "./components/Auth/AuthContext";
 import { CurrencyProvider } from "./components/Currency/CurrencyContext";
+import { SiteProvider } from "./components/LandingPage/SiteContext";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import LandingPage from "./components/LandingPage/LandingPage";
 import ProductsPage from "./components/Products/ProductsPage";
@@ -34,75 +34,82 @@ export default function App() {
   return (
     <AuthProvider>
       <CurrencyProvider>
-        <SiteProvider>
-          <BrowserRouter>
-            <Routes>
-              {/* Public */}
-              <Route path="/" element={<LandingPage />} />
-              <Route
-                path="/products"
-                element={<ProductsPage cart={cart} onAddToCart={addToCart} />}
-              />
-              <Route
-                path="/checkout"
-                element={<CheckoutPage cart={cart} onClearCart={clearCart} />}
-              />
+        <BrowserRouter>
+          <Routes>
+            {/* ── Public — wrapped in SiteProvider for landing page content ── */}
+            <Route
+              path="/"
+              element={
+                <SiteProvider>
+                  <LandingPage />
+                </SiteProvider>
+              }
+            />
+            <Route
+              path="/products"
+              element={<ProductsPage cart={cart} onAddToCart={addToCart} />}
+            />
+            <Route
+              path="/checkout"
+              element={<CheckoutPage cart={cart} onClearCart={clearCart} />}
+            />
 
-              {/* Auth */}
-              <Route path="/admin/login" element={<LoginPage />} />
+            {/* ── Auth ── */}
+            <Route path="/admin/login" element={<LoginPage />} />
 
-              {/* Admin — all protected */}
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
+            {/* ── Admin — SiteProvider only for dashboard (content editor) ── */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <SiteProvider>
                     <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/products"
-                element={
-                  <ProtectedRoute>
-                    <AdminProducts />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/orders"
-                element={
-                  <ProtectedRoute>
-                    <AdminOrders />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/users"
-                element={
-                  <ProtectedRoute>
-                    <AdminUsers />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/currencies"
-                element={
-                  <ProtectedRoute>
-                    <AdminCurrencies />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pos"
-                element={
-                  <ProtectedRoute>
-                    <POSApp />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-        </SiteProvider>
+                  </SiteProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/products"
+              element={
+                <ProtectedRoute>
+                  <AdminProducts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/orders"
+              element={
+                <ProtectedRoute>
+                  <AdminOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute>
+                  <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/currencies"
+              element={
+                <ProtectedRoute>
+                  <AdminCurrencies />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pos"
+              element={
+                <ProtectedRoute>
+                  <POSApp />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </CurrencyProvider>
     </AuthProvider>
   );
