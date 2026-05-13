@@ -700,13 +700,12 @@ export default function POSApp() {
     setRecentSales(Array.isArray(data) ? data : []);
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadSession();
     loadProducts();
     loadSales();
     searchRef.current?.focus();
-  }, []);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   /* ── Filtered products ── */
   const filtered = products.filter((p) => {
