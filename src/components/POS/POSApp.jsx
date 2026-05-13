@@ -700,6 +700,7 @@ export default function POSApp() {
     setRecentSales(Array.isArray(data) ? data : []);
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadSession();
     loadProducts();

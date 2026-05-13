@@ -629,7 +629,7 @@ const SECTION_CONFIG = {
    ROOT DASHBOARD
    ════════════════════════════════════════════ */
 export default function AdminDashboard() {
-  const { content, loading, error } = useSite();
+  const { loading, error } = useSite();
   const { user, logout } = useAuth();
   const [activeSection, setActiveSection] = useState("hero");
   const [toast, setToast] = useState({ msg: "", type: "success" });
