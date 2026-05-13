@@ -23,7 +23,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      navigate("/admin");
+      window.location.href = "/admin";
     } catch (err) {
       setError(err.message);
     } finally {
