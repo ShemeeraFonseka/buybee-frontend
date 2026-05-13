@@ -1,0 +1,331 @@
+:root {
+  --honey: #f5a623;
+  --honey-dark: #d4831a;
+  --honey-light: #fff3dc;
+  --bee-black: #1a1208;
+  --cream: #fffcf5;
+  --warm-gray: #8a7d6b;
+  --border: rgba(245, 166, 35, 0.2);
+  --white: #ffffff;
+}
+
+.ac-root {
+  font-family: "Nunito", sans-serif;
+  color: var(--bee-black);
+}
+
+/* ─── HEADER ─── */
+.ac-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 36px;
+  background: var(--white);
+  border-bottom: 1px solid rgba(245, 166, 35, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 20px;
+}
+.ac-header__title {
+  font-family: "Nunito", sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+.ac-header__sub {
+  font-size: 0.82rem;
+  color: var(--warm-gray);
+}
+
+/* ─── LIVE NOTE ─── */
+.ac-live-note {
+  margin: 16px 36px 0;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* ─── INFO BOX ─── */
+.ac-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 20px 36px;
+  background: var(--honey-light);
+  border: 1.5px solid rgba(245, 166, 35, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.85rem;
+  color: var(--bee-black);
+  line-height: 1.6;
+}
+.ac-info__icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ─── CARDS ─── */
+.ac-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 0 36px 36px;
+}
+
+.ac-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ac-card--base {
+  border-color: rgba(245, 166, 35, 0.5);
+  background: var(--honey-light);
+}
+
+.ac-card__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ac-card__symbol {
+  width: 48px;
+  height: 48px;
+  background: var(--honey);
+  color: var(--bee-black);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
+}
+
+.ac-card__code {
+  font-family: "Nunito", sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+.ac-card__name {
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+}
+
+.ac-card__base-badge {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--honey);
+  color: var(--bee-black);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ─── FIELDS ─── */
+.ac-card__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ac-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.ac-field__label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--warm-gray);
+}
+.ac-field__input {
+  padding: 9px 12px;
+  border: 1.5px solid rgba(245, 166, 35, 0.25);
+  border-radius: 10px;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.92rem;
+  color: var(--bee-black);
+  background: var(--cream);
+  outline: none;
+  width: 100%;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.ac-field__input:focus {
+  border-color: var(--honey);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+.ac-field__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── PREVIEW ─── */
+.ac-card__preview {
+  background: var(--cream);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+.ac-card__preview-label {
+  color: var(--warm-gray);
+  font-weight: 600;
+}
+.ac-card__preview-val {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  color: var(--honey-dark);
+  font-size: 0.95rem;
+}
+
+/* ─── BUTTONS ─── */
+.ac-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ac-btn--refresh {
+  background: var(--bee-black);
+  color: var(--white);
+  padding: 11px 22px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ac-btn--refresh:hover:not(:disabled) {
+  background: #2d2010;
+}
+.ac-btn--refresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ac-btn--save {
+  width: 100%;
+  justify-content: center;
+  background: #f5f5f5;
+  color: var(--warm-gray);
+  border: 1.5px solid #e0e0e0;
+}
+.ac-btn--save-active {
+  background: var(--honey);
+  color: var(--bee-black);
+  border-color: var(--honey);
+  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+}
+.ac-btn--save-active:hover {
+  background: var(--honey-dark);
+  color: var(--white);
+}
+.ac-btn--save:disabled:not(.ac-btn--save-active) {
+  cursor: default;
+}
+
+.ac-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── TOAST ─── */
+.ac-toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: toastIn 0.3s ease;
+}
+.ac-toast--success {
+  background: var(--bee-black);
+  color: var(--honey);
+}
+.ac-toast--error {
+  background: #e53935;
+  color: #fff;
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── LOADING ─── */
+.ac-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px;
+  color: var(--warm-gray);
+}
+.ac-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(245, 166, 35, 0.2);
+  border-top-color: var(--honey);
+  animation: spin 0.8s linear infinite;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .ac-cards {
+    grid-template-columns: 1fr;
+  }
+  .ac-header,
+  .ac-info,
+  .ac-live-note {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .ac-cards {
+    padding: 0 16px 32px;
+  }
+}

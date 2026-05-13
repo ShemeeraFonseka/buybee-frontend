@@ -1,0 +1,374 @@
+:root {
+  --honey: #f5a623;
+  --honey-dark: #d4831a;
+  --honey-light: #fff3dc;
+  --bee-black: #1a1208;
+  --cream: #fffcf5;
+  --warm-gray: #8a7d6b;
+  --border: rgba(245, 166, 35, 0.2);
+  --white: #ffffff;
+}
+
+.au-root {
+  font-family: "Nunito", sans-serif;
+  color: var(--bee-black);
+  position: relative;
+}
+
+/* ─── HEADER ─── */
+.au-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 36px;
+  background: var(--white);
+  border-bottom: 1px solid rgba(245, 166, 35, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.au-header__title {
+  font-family: "Nunito", sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+}
+.au-header__sub {
+  font-size: 0.82rem;
+  color: var(--warm-gray);
+}
+
+/* ─── FORM ─── */
+.au-form-wrap {
+  padding: 24px 36px;
+}
+.au-form-wrap__title {
+  font-family: "Nunito", sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.au-form {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 700px;
+}
+
+.au-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.au-form__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.au-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.au-field__label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--warm-gray);
+}
+.au-field__input {
+  padding: 10px 14px;
+  border: 1.5px solid rgba(245, 166, 35, 0.25);
+  border-radius: 10px;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.9rem;
+  color: var(--bee-black);
+  background: var(--cream);
+  outline: none;
+  width: 100%;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.au-field__input:focus {
+  border-color: var(--honey);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+
+.au-field__pass-wrap {
+  position: relative;
+}
+.au-field__pass-wrap .au-field__input {
+  padding-right: 44px;
+}
+.au-field__eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+/* ─── TABLE ─── */
+.au-table-wrap {
+  padding: 0 36px 24px;
+  overflow-x: auto;
+}
+.au-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.au-table th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--warm-gray);
+  font-weight: 800;
+  border-bottom: 2px solid rgba(245, 166, 35, 0.15);
+  background: var(--cream);
+}
+.au-table td {
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(245, 166, 35, 0.08);
+  vertical-align: middle;
+}
+.au-table tr:hover td {
+  background: rgba(245, 166, 35, 0.03);
+}
+
+.au-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.au-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--honey-light);
+  border: 2px solid rgba(245, 166, 35, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--honey-dark);
+  flex-shrink: 0;
+}
+.au-user-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.au-you {
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: var(--honey-light);
+  color: var(--honey-dark);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.au-email {
+  font-size: 0.82rem;
+  color: var(--warm-gray);
+}
+.au-last-login {
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+}
+
+/* ─── ROLE BADGE ─── */
+.au-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--c) 12%, white);
+  color: var(--c);
+  border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
+}
+
+/* ─── STATUS TOGGLE ─── */
+.au-status-toggle {
+  background: none;
+  border: 1.5px solid;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.au-status-toggle--active {
+  color: #27ae60;
+  border-color: #a5d6a7;
+}
+.au-status-toggle--active:hover {
+  background: #e8f5e9;
+}
+.au-status-toggle--inactive {
+  color: var(--warm-gray);
+  border-color: #e0e0e0;
+}
+.au-status-toggle--inactive:hover {
+  background: #f5f5f5;
+}
+.au-status-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── TABLE ACTIONS ─── */
+.au-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.au-confirm-msg {
+  font-size: 0.8rem;
+  color: #e53935;
+  font-weight: 700;
+}
+
+/* ─── BUTTONS ─── */
+.au-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+.au-btn:active {
+  transform: scale(0.97);
+}
+.au-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.au-btn--primary {
+  background: var(--honey);
+  color: var(--bee-black);
+}
+.au-btn--primary:hover {
+  background: var(--honey-dark);
+  color: var(--white);
+}
+.au-btn--ghost {
+  background: #f7f6f3;
+  color: var(--bee-black);
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+}
+.au-btn--ghost:hover {
+  background: #eee;
+}
+.au-btn--danger {
+  background: #e53935;
+  color: var(--white);
+}
+.au-btn--danger:hover {
+  background: #b71c1c;
+}
+.au-btn--danger-ghost {
+  background: none;
+  color: #e53935;
+  border: 1.5px solid rgba(229, 57, 53, 0.25);
+}
+.au-btn--danger-ghost:hover {
+  background: #fff3f3;
+}
+.au-btn--sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+/* ─── LOADING ─── */
+.au-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px;
+  color: var(--warm-gray);
+}
+.au-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(245, 166, 35, 0.2);
+  border-top-color: var(--honey);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── TOAST ─── */
+.au-toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: toastIn 0.3s ease;
+}
+.au-toast--success {
+  background: var(--bee-black);
+  color: var(--honey);
+}
+.au-toast--error {
+  background: #e53935;
+  color: var(--white);
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .au-header,
+  .au-table-wrap,
+  .au-form-wrap {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .au-form__grid {
+    grid-template-columns: 1fr;
+  }
+}

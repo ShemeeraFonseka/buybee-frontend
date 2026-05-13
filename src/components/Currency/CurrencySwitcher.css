@@ -1,0 +1,134 @@
+.cs-root {
+  position: relative;
+}
+
+.cs-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--honey-light, #fff3dc);
+  border: 1.5px solid rgba(245, 166, 35, 0.3);
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--bee-black, #1a1208);
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+  white-space: nowrap;
+}
+
+.cs-trigger:hover {
+  background: #ffe8a0;
+  border-color: var(--honey, #f5a623);
+}
+
+.cs-trigger__symbol {
+  font-weight: 800;
+  color: var(--honey-dark, #d4831a);
+}
+
+.cs-trigger__code {
+  font-weight: 700;
+}
+
+.cs-trigger__arrow {
+  font-size: 0.7rem;
+  color: var(--warm-gray, #8a7d6b);
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.cs-trigger__arrow--open {
+  transform: rotate(180deg);
+}
+
+/* ─── DROPDOWN ─── */
+.cs-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1.5px solid rgba(245, 166, 35, 0.2);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(26, 18, 8, 0.12);
+  overflow: hidden;
+  z-index: 999;
+  min-width: 180px;
+  animation: csDropIn 0.15s ease;
+}
+
+@keyframes csDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cs-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.cs-option:hover {
+  background: #fffcf5;
+}
+
+.cs-option--active {
+  background: #fff3dc;
+}
+
+.cs-option__symbol {
+  width: 28px;
+  height: 28px;
+  background: var(--honey-light, #fff3dc);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--honey-dark, #d4831a);
+  flex-shrink: 0;
+}
+
+.cs-option__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs-option__code {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1a1208;
+  line-height: 1;
+}
+
+.cs-option__name {
+  font-size: 0.72rem;
+  color: #8a7d6b;
+  margin-top: 2px;
+}
+
+.cs-option__check {
+  font-size: 0.8rem;
+  color: var(--honey-dark, #d4831a);
+  font-weight: 800;
+}
