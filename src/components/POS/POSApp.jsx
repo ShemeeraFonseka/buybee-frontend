@@ -708,7 +708,6 @@ export default function POSApp() {
     searchRef.current?.focus();
   }, []);
 
-  /* ── Filtered products ── */
   const filtered = products.filter((p) => {
     const matchCat = category === "All" || p.category === category;
     const matchSearch =
