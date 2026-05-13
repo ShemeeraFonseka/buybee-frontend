@@ -101,10 +101,10 @@ export default function AdminUsers() {
       setLoading(false);
     }
   };
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     load();
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSave = async (form) => {
     if (!form.name || !form.email) {
