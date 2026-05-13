@@ -4,9 +4,7 @@ import { useCurrency } from "../Currency/CurrencyContext";
 import CurrencySwitcher from "../Currency/CurrencySwitcher";
 import "./ProductsPage.css";
 
-const API_BASE = process.env.REACT_APP_API_URL
-  ? process.env.REACT_APP_API_URL.replace("/api/content", "")
-  : "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 const PRODUCTS_API = `${API_BASE}/api/products`;
 
 const imgSrc = (url) =>

@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../Auth/AuthContext";
 import "./AdminCurrencies.css";
 
-const API_BASE = process.env.REACT_APP_API_URL
-  ? process.env.REACT_APP_API_URL.replace("/api/content", "")
-  : "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 const CURRENCY_API = `${API_BASE}/api/currencies`;
 
 export default function AdminCurrencies() {
