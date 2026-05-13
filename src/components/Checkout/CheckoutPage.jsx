@@ -10,7 +10,7 @@ const ORDERS_API = `${API_BASE}/api/orders`;
 const imgSrc = (url) =>
   !url ? null : url.startsWith("http") ? url : `${API_BASE}${url}`;
 
-const SHIPPING_FEE = 5.99;
+const SHIPPING_LKR = 400; // shipping fee in LKR — change this to adjust
 
 /* ─── STEP BAR ─── */
 function StepBar({ step }) {
@@ -37,10 +37,10 @@ function StepBar({ step }) {
 }
 
 /* ─── ORDER SUMMARY SIDEBAR ─── */
-function OrderSummary({ cart }) {
+function OrderSummary({ cart, shippingFeeUSD }) {
   const { format } = useCurrency();
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const total = subtotal + SHIPPING_FEE;
+  const total = subtotal + shippingFeeUSD;
 
   return (
     <div className="ck-summary">
@@ -78,7 +78,7 @@ function OrderSummary({ cart }) {
         </div>
         <div className="ck-summary__row">
           <span>Shipping</span>
-          <span>{format(SHIPPING_FEE)}</span>
+          <span>{format(shippingFeeUSD)}</span>
         </div>
         <div className="ck-summary__row ck-summary__row--total">
           <span>Total</span>
@@ -287,16 +287,23 @@ function ShippingStep({ data, onChange, onNext }) {
 }
 
 /* ─── STEP 2: REVIEW & PLACE ─── */
-function ReviewStep({ shipping, cart, onBack, onPlace, placing, error }) {
+function ReviewStep({
+  shipping,
+  cart,
+  shippingFeeUSD,
+  onBack,
+  onPlace,
+  placing,
+  error,
+}) {
   const { format } = useCurrency();
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const total = subtotal + SHIPPING_FEE;
+  const total = subtotal + shippingFeeUSD;
 
   return (
     <div className="ck-section">
       <h2 className="ck-section__title">✅ Review Your Order</h2>
 
-      {/* Shipping */}
       <div className="ck-review-card">
         <div className="ck-review-card__header">📦 Shipping to</div>
         <div className="ck-review-card__body">
@@ -316,7 +323,6 @@ function ReviewStep({ shipping, cart, onBack, onPlace, placing, error }) {
         </div>
       </div>
 
-      {/* Payment */}
       <div className="ck-review-card">
         <div className="ck-review-card__header">💳 Payment</div>
         <div className="ck-review-card__body">
@@ -326,7 +332,6 @@ function ReviewStep({ shipping, cart, onBack, onPlace, placing, error }) {
         </div>
       </div>
 
-      {/* Items */}
       <div className="ck-review-card">
         <div className="ck-review-card__header">
           🛍️ Items ({cart.reduce((s, i) => s + i.qty, 0)})
@@ -363,7 +368,7 @@ function ReviewStep({ shipping, cart, onBack, onPlace, placing, error }) {
             </div>
             <div className="ck-review-totals__row">
               <span>Shipping</span>
-              <span>{format(SHIPPING_FEE)}</span>
+              <span>{format(shippingFeeUSD)}</span>
             </div>
             <div className="ck-review-totals__row ck-review-totals__row--total">
               <span>Total</span>
@@ -399,6 +404,7 @@ function ReviewStep({ shipping, cart, onBack, onPlace, placing, error }) {
 
 /* ─── CONFIRMATION ─── */
 function Confirmation({ order }) {
+  const { format } = useCurrency();
   return (
     <div className="ck-confirm">
       <div className="ck-confirm__icon">🎉</div>
@@ -424,16 +430,16 @@ function Confirmation({ order }) {
               {item.title}{" "}
               <span style={{ color: "#8A7D6B" }}>× {item.qty}</span>
             </span>
-            <span>${(item.price * item.qty).toFixed(2)}</span>
+            <span>{format(item.price * item.qty)}</span>
           </div>
         ))}
         <div className="ck-confirm__item ck-confirm__item--shipping">
           <span>Shipping</span>
-          <span>${order.shippingFee.toFixed(2)}</span>
+          <span>{format(order.shippingFee)}</span>
         </div>
         <div className="ck-confirm__item ck-confirm__item--total">
           <span>Total</span>
-          <span>${order.total.toFixed(2)}</span>
+          <span>{format(order.total)}</span>
         </div>
       </div>
 
@@ -465,6 +471,11 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
   const location = useLocation();
   const cart = cartProp.length > 0 ? cartProp : location.state?.cart || [];
 
+  // Get live LKR rate to convert Rs 400 → USD accurately
+  const { currencies } = useCurrency();
+  const lkrRate = currencies.find((c) => c.code === "LKR")?.rateToUSD || 320;
+  const shippingFeeUSD = SHIPPING_LKR / lkrRate; // e.g. 400 / 320 = $1.25
+
   const [step, setStep] = useState(0);
   const [placing, setPlacing] = useState(false);
   const [order, setOrder] = useState(null);
@@ -485,7 +496,7 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
   });
 
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const total = subtotal + SHIPPING_FEE;
+  const total = subtotal + shippingFeeUSD;
 
   const placeOrder = async () => {
     setPlacing(true);
@@ -502,14 +513,12 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
           category: i.category || "",
         })),
         subtotal,
-        shippingFee: SHIPPING_FEE,
+        shippingFee: shippingFeeUSD,
         discount: 0,
         total,
         paymentMethod: shipping.paymentMethod,
         notes: shipping.notes,
       };
-
-      console.log("🛒 Sending order:", JSON.stringify(body, null, 2));
 
       const res = await fetch(ORDERS_API, {
         method: "POST",
@@ -519,7 +528,6 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
 
       const data = await res.json();
       if (!res.ok) {
-        // Handle out-of-stock response specifically
         if (data.outOfStock?.length) {
           const list = data.outOfStock
             .map(
@@ -535,8 +543,7 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
         throw new Error(detail);
       }
 
-      const placed = await res.json();
-      setOrder(placed);
+      setOrder(data);
       if (onClearCart) onClearCart();
     } catch (err) {
       setError(err.message);
@@ -545,7 +552,6 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
     }
   };
 
-  /* ── Nav ── */
   const Nav = () => (
     <nav className="ck-nav">
       <a href="/" className="ck-nav__logo">
@@ -558,7 +564,6 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
     </nav>
   );
 
-  /* ── Empty cart ── */
   if (!cart.length && !order) {
     return (
       <div className="ck-root">
@@ -575,7 +580,6 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
     );
   }
 
-  /* ── Confirmation ── */
   if (order) {
     return (
       <div className="ck-root">
@@ -587,7 +591,6 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
     );
   }
 
-  /* ── Checkout flow ── */
   return (
     <div className="ck-root">
       <Nav />
@@ -607,6 +610,7 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
             <ReviewStep
               shipping={shipping}
               cart={cart}
+              shippingFeeUSD={shippingFeeUSD}
               onBack={() => setStep(0)}
               onPlace={placeOrder}
               placing={placing}
@@ -616,7 +620,7 @@ export default function CheckoutPage({ cart: cartProp = [], onClearCart }) {
         </div>
 
         <aside className="ck-aside">
-          <OrderSummary cart={cart} />
+          <OrderSummary cart={cart} shippingFeeUSD={shippingFeeUSD} />
         </aside>
       </div>
     </div>

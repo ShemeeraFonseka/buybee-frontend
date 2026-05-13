@@ -400,13 +400,24 @@ export default function ProductsPage() {
           className="pp-filter-toggle"
           onClick={() => setSidebarOpen((o) => !o)}
         >
-          ⚙️ Filters {sidebarOpen ? "▲" : "▼"}
+          {sidebarOpen ? "✕ Close" : "⚙️ Filters"}
         </button>
 
         {/* ── SIDEBAR ── */}
         <div
           className={`pp-sidebar-wrap ${sidebarOpen ? "pp-sidebar-wrap--open" : ""}`}
         >
+          {sidebarOpen && (
+            <div className="pp-sidebar-close-bar">
+              <span className="pp-sidebar-close-title">⚙️ Filters</span>
+              <button
+                className="pp-sidebar-close-btn"
+                onClick={() => setSidebarOpen(false)}
+              >
+                ✕ Close
+              </button>
+            </div>
+          )}
           <Sidebar
             categories={categories}
             filters={filters}

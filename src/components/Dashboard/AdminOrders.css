@@ -615,26 +615,172 @@
 }
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 768px) {
+
+/* Tablet (≤900px) */
+@media (max-width: 900px) {
   .ao-header,
   .ao-toolbar,
   .ao-table-wrap,
   .ao-pagination {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
+  .ao-tabs {
+    padding: 10px 20px;
+  }
+  .ao-search {
+    max-width: 100%;
+  }
+
+  /* Hide Date + Items columns */
+  .ao-table th:nth-child(3),
+  .ao-table td:nth-child(3),
+  .ao-table th:nth-child(4),
+  .ao-table td:nth-child(4) {
+    display: none;
+  }
+}
+
+/* Mobile (≤640px) */
+@media (max-width: 640px) {
+  /* Header stacks */
   .ao-header {
     flex-direction: column;
     align-items: flex-start;
+    padding: 16px;
+    gap: 14px;
   }
+  .ao-header__title {
+    font-size: 1.2rem;
+  }
+  .ao-header__stats {
+    gap: 12px;
+  }
+  .ao-stat__num {
+    font-size: 1.15rem;
+  }
+
+  /* Tabs */
   .ao-tabs {
+    padding: 8px 16px;
+    gap: 6px;
+  }
+  .ao-tab {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
+  /* Toolbar */
+  .ao-toolbar {
     padding: 10px 16px;
   }
-  .ao-table {
-    font-size: 0.8rem;
+
+  /* Table — show Order#, Total, Status, Actions only */
+  .ao-table th:nth-child(2),
+  .ao-table td:nth-child(2),
+  .ao-table th:nth-child(3),
+  .ao-table td:nth-child(3),
+  .ao-table th:nth-child(4),
+  .ao-table td:nth-child(4),
+  .ao-table th:nth-child(6),
+  .ao-table td:nth-child(6) {
+    display: none;
+  }
+
+  .ao-table th {
+    padding: 10px;
+    font-size: 0.68rem;
+  }
+  .ao-table td {
+    padding: 10px;
+  }
+  .ao-table-wrap {
+    padding: 0 16px 16px;
+  }
+  .ao-order-num {
+    font-size: 0.82rem;
+  }
+  .ao-total {
+    font-size: 0.88rem;
+  }
+  .ao-table__actions {
+    gap: 5px;
+  }
+  .ao-btn--sm {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  /* Pagination */
+  .ao-pagination {
+    padding: 16px;
+    gap: 5px;
+  }
+
+  /* Modal — bottom sheet */
+  .ao-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
   }
   .ao-modal {
-    max-height: 100vh;
-    border-radius: 0;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+  }
+  .ao-modal__header {
+    padding: 16px 20px;
+  }
+  .ao-modal__body {
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
+  /* Status flow */
+  .ao-status-flow {
+    gap: 6px;
+  }
+  .ao-status-step {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+
+  /* Payment buttons */
+  .ao-payment-btns {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ao-pay-btn {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+
+  /* Items */
+  .ao-modal__item {
+    padding: 8px;
+    gap: 8px;
+  }
+  .ao-modal__item-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Toast */
+  .ao-toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+}
+
+/* Small mobile (≤380px) */
+@media (max-width: 380px) {
+  /* Hide Total too — just Order# + Status + Actions */
+  .ao-table th:nth-child(5),
+  .ao-table td:nth-child(5) {
+    display: none;
+  }
+  .ao-header__stats {
+    display: none;
   }
 }

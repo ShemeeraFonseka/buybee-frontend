@@ -40,18 +40,25 @@ function Logo({ dark = false }) {
 }
 
 function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <nav className="nav">
       <Logo />
-      <ul className="nav__links">
+      <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
         <li>
-          <a href="#features">Features</a>
+          <a href="#features" onClick={() => setMenuOpen(false)}>
+            Features
+          </a>
         </li>
         <li>
-          <a href="#categories">Shop</a>
+          <a href="#categories" onClick={() => setMenuOpen(false)}>
+            Shop
+          </a>
         </li>
         <li>
-          <a href="#products">Deals</a>
+          <a href="#products" onClick={() => setMenuOpen(false)}>
+            Deals
+          </a>
         </li>
         <li>
           <CurrencySwitcher />
@@ -66,6 +73,13 @@ function Navbar() {
           </a>
         </li>
       </ul>
+      <button
+        className="nav__hamburger"
+        onClick={() => setMenuOpen((o) => !o)}
+        aria-label="Menu"
+      >
+        {menuOpen ? "✕" : "☰"}
+      </button>
     </nav>
   );
 }
@@ -131,7 +145,7 @@ function Hero() {
         </h1>
         <p className="hero__sub">{h.sub}</p>
         <div className="hero__actions">
-          <a href="#categories" className="btn-primary">
+          <a href="/products" className="btn-primary">
             {h.btnPrimary}
           </a>
           <a href="#features" className="btn-secondary">

@@ -572,18 +572,145 @@
 }
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 768px) {
-  .ap-form-wrap,
+
+/* Tablet (≤900px) */
+@media (max-width: 900px) {
+  .ap-header,
   .ap-toolbar,
   .ap-table-wrap,
+  .ap-form-wrap,
+  .ap-pagination {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* Hide Tag + Featured columns */
+  .ap-table th:nth-child(5),
+  .ap-table td:nth-child(5),
+  .ap-table th:nth-child(6),
+  .ap-table td:nth-child(6) {
+    display: none;
+  }
+
+  .ap-form {
+    padding: 20px;
+  }
+}
+
+/* Mobile (≤640px) */
+@media (max-width: 640px) {
+  /* Header stacks vertically */
   .ap-header {
-    padding-left: 16px;
-    padding-right: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+  .ap-header__title {
+    font-size: 1.2rem;
+  }
+
+  /* Toolbar */
+  .ap-toolbar {
+    padding: 12px 16px;
+  }
+  .ap-search {
+    max-width: 100%;
+  }
+
+  /* Hide Category + Stock columns too — show Product, Price, Actions only */
+  .ap-table th:nth-child(2),
+  .ap-table td:nth-child(2),
+  .ap-table th:nth-child(4),
+  .ap-table td:nth-child(4),
+  .ap-table th:nth-child(5),
+  .ap-table td:nth-child(5),
+  .ap-table th:nth-child(6),
+  .ap-table td:nth-child(6) {
+    display: none;
+  }
+
+  .ap-table th {
+    padding: 10px;
+    font-size: 0.68rem;
+  }
+  .ap-table td {
+    padding: 10px;
+  }
+
+  /* Product cell compact */
+  .ap-table__thumb {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+  .ap-table__name {
+    font-size: 0.82rem;
+  }
+  .ap-table__sub {
+    display: none;
+  }
+
+  /* Actions */
+  .ap-table__actions {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .ap-confirm-msg {
+    display: none;
+  }
+
+  /* Form — all fields full width */
+  .ap-form-wrap {
+    padding: 16px;
+  }
+  .ap-form {
+    padding: 16px;
   }
   .ap-field--half {
     width: 100%;
   }
-  .ap-table {
-    font-size: 0.8rem;
+
+  /* Form action buttons stack */
+  .ap-form__actions {
+    flex-direction: column;
+  }
+  .ap-form__actions .ap-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Image preview stacks */
+  .ap-img-preview {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ap-img-preview__img {
+    width: 100%;
+    height: 160px;
+  }
+  .ap-img-preview__btns {
+    flex-direction: row;
+  }
+
+  /* Pagination + Toast */
+  .ap-pagination {
+    padding: 16px;
+    gap: 6px;
+  }
+  .ap-toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+}
+
+/* Small mobile (≤380px) */
+@media (max-width: 380px) {
+  /* Also hide Price — just product name + actions */
+  .ap-table th:nth-child(3),
+  .ap-table td:nth-child(3) {
+    display: none;
   }
 }

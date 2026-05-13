@@ -361,14 +361,129 @@
 }
 
 /* ─── RESPONSIVE ─── */
+
+/* Tablet (≤768px) */
 @media (max-width: 768px) {
   .au-header,
   .au-table-wrap,
   .au-form-wrap {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
+
+  /* Hide Created + Last Login columns */
+  .au-table th:nth-child(3),
+  .au-table td:nth-child(3),
+  .au-table th:nth-child(4),
+  .au-table td:nth-child(4) {
+    display: none;
+  }
+
   .au-form__grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile (≤640px) */
+@media (max-width: 640px) {
+  /* Header stacks */
+  .au-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+  .au-header__title {
+    font-size: 1.2rem;
+  }
+  .au-header .au-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Table padding */
+  .au-table-wrap {
+    padding: 0 16px 16px;
+  }
+  .au-table th {
+    padding: 10px 10px;
+    font-size: 0.68rem;
+  }
+  .au-table td {
+    padding: 12px 10px;
+  }
+
+  /* User cell compact */
+  .au-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  .au-user-name {
+    font-size: 0.82rem;
+  }
+  .au-you {
+    display: none;
+  }
+
+  /* Email truncates */
+  .au-email {
+    font-size: 0.75rem;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  /* Actions compact */
+  .au-table__actions {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .au-confirm-msg {
+    display: none;
+  }
+  .au-btn--sm {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  /* Form */
+  .au-form-wrap {
+    padding: 16px;
+  }
+  .au-form {
+    padding: 16px;
+  }
+  .au-form__actions {
+    flex-direction: column;
+  }
+  .au-form__actions .au-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Toast */
+  .au-toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+
+  /* Empty state */
+  .au-loading,
+  .au-empty {
+    padding: 40px 16px;
+  }
+}
+
+/* Small mobile (≤380px) */
+@media (max-width: 380px) {
+  /* Hide email column too — just Name + Actions */
+  .au-table th:nth-child(2),
+  .au-table td:nth-child(2) {
+    display: none;
   }
 }

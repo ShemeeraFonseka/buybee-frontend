@@ -315,17 +315,115 @@
 }
 
 /* ─── RESPONSIVE ─── */
+
+/* Tablet (≤900px) */
 @media (max-width: 900px) {
-  .ac-cards {
-    grid-template-columns: 1fr;
-  }
   .ac-header,
   .ac-info,
   .ac-live-note {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   .ac-cards {
-    padding: 0 16px 32px;
+    grid-template-columns: 1fr;
+    padding: 0 20px 32px;
+  }
+  .ac-info {
+    margin: 16px 20px;
+  }
+  .ac-live-note {
+    margin: 16px 20px 0;
+  }
+}
+
+/* Mobile (≤640px) */
+@media (max-width: 640px) {
+  /* Header stacks */
+  .ac-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 12px;
+  }
+  .ac-header__title {
+    font-size: 1.2rem;
+  }
+  .ac-header__sub {
+    font-size: 0.78rem;
+  }
+
+  /* Refresh button full width */
+  .ac-btn--refresh {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Info box */
+  .ac-info {
+    margin: 12px 16px;
+    padding: 12px;
+    font-size: 0.82rem;
+  }
+  .ac-live-note {
+    margin: 12px 16px 0;
+  }
+
+  /* Cards single column, tighter */
+  .ac-cards {
+    grid-template-columns: 1fr;
+    padding: 0 16px 24px;
+    gap: 14px;
+  }
+  .ac-card {
+    padding: 18px;
+  }
+
+  /* Card header compact */
+  .ac-card__symbol {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  .ac-card__code {
+    font-size: 1rem;
+  }
+
+  /* Base badge wraps below on tiny screens */
+  .ac-card__base-badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+
+  /* Preview row stacks */
+  .ac-card__preview {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .ac-card__preview-val {
+    font-size: 1rem;
+  }
+
+  /* Toast full width */
+  .ac-toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+
+  /* Loading */
+  .ac-loading {
+    padding: 40px 16px;
+  }
+}
+
+/* Small mobile (≤380px) */
+@media (max-width: 380px) {
+  .ac-card__header {
+    flex-wrap: wrap;
+  }
+  .ac-card__base-badge {
+    margin-left: 0;
   }
 }
