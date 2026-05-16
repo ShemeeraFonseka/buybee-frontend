@@ -46,18 +46,13 @@ function Navbar() {
       <Logo />
       <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
         <li>
-          <a href="#features" onClick={() => setMenuOpen(false)}>
-            Features
+          <a href="about" onClick={() => setMenuOpen(false)}>
+            About Us
           </a>
         </li>
         <li>
-          <a href="#categories" onClick={() => setMenuOpen(false)}>
-            Shop
-          </a>
-        </li>
-        <li>
-          <a href="#products" onClick={() => setMenuOpen(false)}>
-            Deals
+          <a href="contact" onClick={() => setMenuOpen(false)}>
+            Contact
           </a>
         </li>
         <li>

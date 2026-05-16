@@ -6,27 +6,8 @@ import {
   useCallback,
 } from "react";
 
-const API = process.env.REACT_APP_API_BASE
-  ? `${process.env.REACT_APP_API_BASE}/api/content`
-  : "http://localhost:5000/api/content";
-
-/* Safe default so content.hero etc never crash editors */
-const DEFAULT_CONTENT = {
-  hero: {
-    badge: "",
-    titleMain: "",
-    titleEmph: "",
-    sub: "",
-    btnPrimary: "",
-    btnSecondary: "",
-  },
-  promo: { label: "", title: "", sub: "", code: "", btn: "", bigNum: "" },
-  stats: [],
-  features: [],
-  categories: [],
-  products: [],
-  testimonials: [],
-};
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
+const API = `${API_BASE}/api/content`;
 
 const SiteContext = createContext(null);
 
@@ -36,19 +17,17 @@ export function SiteProvider({ children }) {
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  /* ── Load all content on mount ── */
   const loadContent = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(API);
       if (!res.ok) throw new Error(`Server error ${res.status}`);
       const data = await res.json();
-      // Merge with defaults so no key is ever undefined
-      setContent({ ...DEFAULT_CONTENT, ...data });
+      setContent(data);
       setError(null);
     } catch (err) {
       setError(err.message);
-      // Still set default content so admin dashboard renders
-      setContent(DEFAULT_CONTENT);
     } finally {
       setLoading(false);
     }
@@ -58,6 +37,7 @@ export function SiteProvider({ children }) {
     loadContent();
   }, [loadContent]);
 
+  /* ── Update hero or promo (flat objects) ── */
   const updateSection = useCallback(async (section, patch) => {
     setSaving(true);
     try {
@@ -76,6 +56,7 @@ export function SiteProvider({ children }) {
     }
   }, []);
 
+  /* ── Add item to an array section ── */
   const addItem = useCallback(async (section, item) => {
     setSaving(true);
     try {
@@ -97,6 +78,7 @@ export function SiteProvider({ children }) {
     }
   }, []);
 
+  /* ── Update one item in an array section ── */
   const updateItem = useCallback(async (section, id, patch) => {
     setSaving(true);
     try {
@@ -118,6 +100,7 @@ export function SiteProvider({ children }) {
     }
   }, []);
 
+  /* ── Delete one item from an array section ── */
   const deleteItem = useCallback(async (section, id) => {
     setSaving(true);
     try {

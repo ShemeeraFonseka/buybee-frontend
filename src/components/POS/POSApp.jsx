@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useCurrency } from "../Currency/CurrencyContext";
 import "./POSApp.css";
+import CurrencySwitcher from "../Currency/CurrencySwitcher";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
 const imgSrc = (url) =>
   !url ? null : url.startsWith("http") ? url : `${API_BASE}${url}`;
 
-/* ─── HELPERS ─── */
-const fmt = (n) => `$${Number(n).toFixed(2)}`;
 const getToken = () => localStorage.getItem("bb_token");
 const authHeaders = () => ({
   "Content-Type": "application/json",
@@ -17,59 +17,37 @@ const authHeaders = () => ({
 /* ════════════════════════════════════════
    RECEIPT COMPONENT (printable)
    ════════════════════════════════════════ */
-function Receipt({ sale, session, onClose }) {
+function Receipt({ sale, session, onClose, fmt }) {
   const printRef = useRef(null);
 
   const handlePrint = () => {
     const content = printRef.current.innerHTML;
-
-    // Create hidden iframe for printing
     const iframe = document.createElement("iframe");
     iframe.style.cssText =
       "position:fixed;right:0;bottom:0;width:0;height:0;border:0;";
     document.body.appendChild(iframe);
-
     const doc = iframe.contentDocument || iframe.contentWindow.document;
     doc.open();
     doc.write(`<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>BuyBee Receipt - ${sale.order?.orderNumber}</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 12px;
-      width: 300px;
-      padding: 12px;
-      color: #000;
-    }
-    .r-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 8px; margin-bottom: 8px; }
-    .r-logo   { font-size: 16px; font-weight: bold; margin-bottom: 2px; }
-    .r-sub    { font-size: 10px; color: #555; margin-bottom: 1px; }
-    .r-row    { display: flex; justify-content: space-between; margin: 3px 0; font-size: 12px; }
-    .r-divider{ border-top: 1px dashed #000; margin: 6px 0; }
-    .r-total  { font-weight: bold; font-size: 14px; margin: 4px 0; }
-    .r-change { background: #f0f0f0; padding: 5px 8px; text-align: center; margin: 6px 0; border-radius: 4px; font-weight: bold; font-size: 13px; }
-    .r-footer { text-align: center; margin-top: 10px; font-size: 10px; color: #555; }
-    .r-item-name { max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    @media print {
-      body { width: 100%; }
-      @page { margin: 0; size: 80mm auto; }
-    }
-  </style>
-</head>
-<body>${content}</body>
-</html>`);
+<html><head><meta charset="UTF-8"><title>BuyBee Receipt - ${sale.order?.orderNumber}</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Courier New',monospace; font-size:12px; width:300px; padding:12px; color:#000; }
+  .r-header { text-align:center; border-bottom:1px dashed #000; padding-bottom:8px; margin-bottom:8px; }
+  .r-logo   { font-size:16px; font-weight:bold; margin-bottom:2px; }
+  .r-sub    { font-size:10px; color:#555; margin-bottom:1px; }
+  .r-row    { display:flex; justify-content:space-between; margin:3px 0; font-size:12px; }
+  .r-divider{ border-top:1px dashed #000; margin:6px 0; }
+  .r-total  { font-weight:bold; font-size:14px; margin:4px 0; }
+  .r-change { background:#f0f0f0; padding:5px 8px; text-align:center; margin:6px 0; border-radius:4px; font-weight:bold; font-size:13px; }
+  .r-footer { text-align:center; margin-top:10px; font-size:10px; color:#555; }
+  .r-item-name { max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  @media print { body { width:100%; } @page { margin:0; size:80mm auto; } }
+</style></head><body>${content}</body></html>`);
     doc.close();
-
     iframe.contentWindow.focus();
-
-    // Small delay to ensure content is rendered before printing
     setTimeout(() => {
       iframe.contentWindow.print();
-      // Remove iframe after print dialog closes
       setTimeout(() => document.body.removeChild(iframe), 1000);
     }, 300);
   };
@@ -91,8 +69,6 @@ function Receipt({ sale, session, onClose }) {
             </button>
           </div>
         </div>
-
-        {/* Printable receipt */}
         <div ref={printRef} style={{ padding: "10px" }}>
           <div className="r-header">
             <div className="r-logo">🐝 BuyBee</div>
@@ -101,7 +77,6 @@ function Receipt({ sale, session, onClose }) {
             <div className="r-sub">Operator: {session?.operator}</div>
             <div className="r-sub">Order: {o.orderNumber}</div>
           </div>
-
           <div style={{ marginBottom: 8 }}>
             {o.items.map((item, i) => (
               <div key={i} className="r-row">
@@ -112,7 +87,6 @@ function Receipt({ sale, session, onClose }) {
               </div>
             ))}
           </div>
-
           <div className="r-divider" />
           <div className="r-row">
             <span>Subtotal</span>
@@ -161,6 +135,7 @@ function ShiftModal({
   onClose,
   onCashMovement,
   onCloseShift,
+  fmt,
 }) {
   const [openingCash, setOpeningCash] = useState("");
   const [cashType, setCashType] = useState("in");
@@ -181,7 +156,6 @@ function ShiftModal({
             ✕
           </button>
         </div>
-
         <div className="pos-modal__tabs">
           {session && (
             <button
@@ -216,9 +190,7 @@ function ShiftModal({
             </button>
           )}
         </div>
-
         <div className="pos-modal__body">
-          {/* ── Status ── */}
           {tab === "status" && session && (
             <div className="shift-status">
               <div className="shift-status__row">
@@ -257,12 +229,10 @@ function ShiftModal({
               </div>
             </div>
           )}
-
-          {/* ── Open shift ── */}
           {tab === "open" && !session && (
             <div className="shift-form">
               <div className="pos-field">
-                <label>Opening Cash ($)</label>
+                <label>Opening Cash</label>
                 <input
                   type="number"
                   value={openingCash}
@@ -279,8 +249,6 @@ function ShiftModal({
               </button>
             </div>
           )}
-
-          {/* ── Cash in/out ── */}
           {tab === "cash" && session && (
             <div className="shift-form">
               <div className="pos-field">
@@ -301,7 +269,7 @@ function ShiftModal({
                 </div>
               </div>
               <div className="pos-field">
-                <label>Amount ($)</label>
+                <label>Amount</label>
                 <input
                   type="number"
                   value={cashAmount}
@@ -330,7 +298,6 @@ function ShiftModal({
               >
                 Record Movement
               </button>
-
               <div className="cash-movements">
                 <div className="cash-movements__title">Today's movements</div>
                 {session.cashMovements.map((m, i) => (
@@ -349,8 +316,6 @@ function ShiftModal({
               </div>
             </div>
           )}
-
-          {/* ── Close shift ── */}
           {tab === "close" && session && (
             <div className="shift-form">
               <div className="shift-status">
@@ -360,7 +325,7 @@ function ShiftModal({
                 </div>
               </div>
               <div className="pos-field">
-                <label>Counted Cash ($)</label>
+                <label>Counted Cash</label>
                 <input
                   type="number"
                   value={closingCash}
@@ -391,9 +356,9 @@ function ShiftModal({
 }
 
 /* ════════════════════════════════════════
-   CUSTOMER DISPLAY (second screen)
+   CUSTOMER DISPLAY
    ════════════════════════════════════════ */
-function CustomerDisplay({ cart, total, lastSale }) {
+function CustomerDisplay({ cart, total, lastSale, fmt }) {
   return (
     <div className="customer-display">
       <div className="customer-display__header">
@@ -440,7 +405,7 @@ function CustomerDisplay({ cart, total, lastSale }) {
 /* ════════════════════════════════════════
    CHECKOUT MODAL
    ════════════════════════════════════════ */
-function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
+function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
   const [payMethod, setPayMethod] = useState("cash");
   const [discount, setDiscount] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
@@ -473,7 +438,6 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
           </button>
         </div>
         <div className="pos-modal__body pos-modal__body--checkout">
-          {/* Left — payment */}
           <div className="checkout-left">
             <div className="pos-field">
               <label>Payment Method</label>
@@ -498,9 +462,8 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
                 </button>
               </div>
             </div>
-
             <div className="pos-field">
-              <label>Discount ($)</label>
+              <label>Discount</label>
               <input
                 type="number"
                 value={discount}
@@ -509,10 +472,9 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
                 className="pos-input"
               />
             </div>
-
             {payMethod === "cash" && (
               <div className="pos-field">
-                <label>Amount Paid ($)</label>
+                <label>Amount Paid</label>
                 <input
                   type="number"
                   value={amountPaid}
@@ -550,7 +512,6 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
                 )}
               </div>
             )}
-
             <div className="pos-field">
               <label>Customer (optional)</label>
               <input
@@ -577,7 +538,6 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
                 style={{ marginTop: 6 }}
               />
             </div>
-
             <div className="pos-field">
               <label>Note</label>
               <input
@@ -590,7 +550,6 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
             </div>
           </div>
 
-          {/* Right — order summary */}
           <div className="checkout-right">
             <div className="checkout-summary">
               <div className="checkout-summary__title">Order Summary</div>
@@ -618,7 +577,6 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
                 <span>{fmt(total)}</span>
               </div>
             </div>
-
             <button
               className="pos-btn pos-btn--sale pos-btn--full"
               onClick={() =>
@@ -652,6 +610,9 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving }) {
    MAIN POS APP
    ════════════════════════════════════════ */
 export default function POSApp() {
+  const { format } = useCurrency(); // ← live currency format
+  const fmt = (n) => format(Number(n)); // wrapper used throughout
+
   const [session, setSession] = useState(null);
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
@@ -662,7 +623,7 @@ export default function POSApp() {
   const [saving, setSaving] = useState(false);
   const [lastSale, setLastSale] = useState(null);
   const [toast, setToast] = useState("");
-  const [modal, setModal] = useState(null); // 'shift' | 'checkout' | 'receipt' | 'display'
+  const [modal, setModal] = useState(null);
   const searchRef = useRef(null);
 
   const showToast = (msg) => {
@@ -670,32 +631,35 @@ export default function POSApp() {
     setTimeout(() => setToast(""), 3000);
   };
 
-  /* ── Load session ── */
   const loadSession = useCallback(async () => {
-    const res = await fetch(`${API_BASE}/api/pos/session/current`, {
-      headers: authHeaders(),
-    });
-    const data = await res.json();
-    setSession(data);
+    try {
+      const res = await fetch(`${API_BASE}/api/pos/session/current`, {
+        headers: authHeaders(),
+      });
+      const data = await res.json();
+      setSession(data);
+    } catch {}
   }, []);
 
-  /* ── Load products ── */
   const loadProducts = useCallback(async () => {
-    const res = await fetch(`${API_BASE}/api/products?limit=100&sort=newest`);
-    const data = await res.json();
-    setProducts(data.items || []);
-    setCategories([
-      ...new Set((data.items || []).map((p) => p.category).filter(Boolean)),
-    ]);
+    try {
+      const res = await fetch(`${API_BASE}/api/products?limit=100&sort=newest`);
+      const data = await res.json();
+      setProducts(data.items || []);
+      setCategories([
+        ...new Set((data.items || []).map((p) => p.category).filter(Boolean)),
+      ]);
+    } catch {}
   }, []);
 
-  /* ── Load recent sales ── */
   const loadSales = useCallback(async () => {
-    const res = await fetch(`${API_BASE}/api/pos/sales`, {
-      headers: authHeaders(),
-    });
-    const data = await res.json();
-    setRecentSales(Array.isArray(data) ? data : []);
+    try {
+      const res = await fetch(`${API_BASE}/api/pos/sales`, {
+        headers: authHeaders(),
+      });
+      const data = await res.json();
+      setRecentSales(Array.isArray(data) ? data : []);
+    } catch {}
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -713,7 +677,6 @@ export default function POSApp() {
     return matchCat && matchSearch;
   });
 
-  /* ── Cart actions ── */
   const addToCart = (product) => {
     if (product.stock !== undefined && product.stock <= 0) {
       showToast("Out of stock");
@@ -738,7 +701,6 @@ export default function POSApp() {
   const clearCart = () => setCart([]);
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
-  /* ── Open / Close shift ── */
   const handleOpenShift = async (openingCash) => {
     const res = await fetch(`${API_BASE}/api/pos/session/open`, {
       method: "POST",
@@ -780,7 +742,6 @@ export default function POSApp() {
     } else showToast(data.message);
   };
 
-  /* ── Process sale ── */
   const handleSale = async ({
     payMethod,
     discount,
@@ -813,13 +774,12 @@ export default function POSApp() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-
       setLastSale(data);
       clearCart();
       setModal("receipt");
       loadSession();
       loadSales();
-      loadProducts(); // refresh stock
+      loadProducts();
       showToast("Sale complete!");
     } catch (err) {
       showToast(err.message);
@@ -828,7 +788,6 @@ export default function POSApp() {
     }
   };
 
-  /* ── Keyboard shortcut ── */
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "F2") {
@@ -847,7 +806,6 @@ export default function POSApp() {
 
   return (
     <div className="pos-root">
-      {/* ── TOP BAR ── */}
       <div className="pos-topbar">
         <div className="pos-topbar__brand">🐝 BuyBee POS</div>
         <div className="pos-topbar__center">
@@ -862,6 +820,7 @@ export default function POSApp() {
           )}
         </div>
         <div className="pos-topbar__actions">
+          <CurrencySwitcher />
           <button
             className="pos-btn pos-btn--ghost pos-btn--sm"
             onClick={() => setModal("display")}
@@ -881,9 +840,7 @@ export default function POSApp() {
       </div>
 
       <div className="pos-body">
-        {/* ── LEFT: PRODUCTS ── */}
         <div className="pos-products">
-          {/* Search */}
           <div className="pos-search">
             <span>🔍</span>
             <input
@@ -903,8 +860,6 @@ export default function POSApp() {
               </button>
             )}
           </div>
-
-          {/* Category tabs */}
           <div className="pos-cats">
             {["All", ...categories].map((c) => (
               <button
@@ -916,8 +871,6 @@ export default function POSApp() {
               </button>
             ))}
           </div>
-
-          {/* Product grid */}
           <div className="pos-grid">
             {filtered.map((p) => {
               const oos = p.stock !== undefined && p.stock <= 0;
@@ -950,7 +903,6 @@ export default function POSApp() {
           </div>
         </div>
 
-        {/* ── RIGHT: CART ── */}
         <div className="pos-cart">
           <div className="pos-cart__header">
             <span>
@@ -967,7 +919,6 @@ export default function POSApp() {
               </button>
             )}
           </div>
-
           <div className="pos-cart__items">
             {cart.length === 0 ? (
               <div className="pos-cart__empty">
@@ -1014,8 +965,6 @@ export default function POSApp() {
               ))
             )}
           </div>
-
-          {/* Cart footer */}
           <div className="pos-cart__footer">
             <div className="pos-cart__subtotal">
               <span>Subtotal</span>
@@ -1033,8 +982,6 @@ export default function POSApp() {
                   : `Charge ${fmt(subtotal)} (F4)`}
             </button>
           </div>
-
-          {/* Recent sales */}
           {recentSales.length > 0 && (
             <div className="pos-recent">
               <div className="pos-recent__title">Recent Sales</div>
@@ -1052,7 +999,6 @@ export default function POSApp() {
         </div>
       </div>
 
-      {/* ── MODALS ── */}
       {modal === "shift" && (
         <ShiftModal
           session={session}
@@ -1060,6 +1006,7 @@ export default function POSApp() {
           onClose={() => setModal(null)}
           onCashMovement={handleCashMovement}
           onCloseShift={handleCloseShift}
+          fmt={fmt}
         />
       )}
       {modal === "checkout" && cart.length > 0 && (
@@ -1069,6 +1016,7 @@ export default function POSApp() {
           onSale={handleSale}
           onClose={() => setModal(null)}
           saving={saving}
+          fmt={fmt}
         />
       )}
       {modal === "receipt" && lastSale && (
@@ -1076,6 +1024,7 @@ export default function POSApp() {
           sale={lastSale}
           session={session}
           onClose={() => setModal(null)}
+          fmt={fmt}
         />
       )}
       {modal === "display" && (
@@ -1084,7 +1033,12 @@ export default function POSApp() {
             className="pos-modal pos-modal--display"
             onClick={(e) => e.stopPropagation()}
           >
-            <CustomerDisplay cart={cart} total={subtotal} lastSale={lastSale} />
+            <CustomerDisplay
+              cart={cart}
+              total={subtotal}
+              lastSale={lastSale}
+              fmt={fmt}
+            />
             <button
               className="pos-btn pos-btn--ghost"
               style={{ margin: "0 auto", display: "block", marginTop: 16 }}
@@ -1096,7 +1050,6 @@ export default function POSApp() {
         </div>
       )}
 
-      {/* ── TOAST ── */}
       {toast && <div className="pos-toast">{toast}</div>}
     </div>
   );
