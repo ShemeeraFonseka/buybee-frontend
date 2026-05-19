@@ -46,6 +46,11 @@ function Navbar() {
       <Logo />
       <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
         <li>
+          <a href="/" onClick={() => setMenuOpen(false)}>
+            Home
+          </a>
+        </li>
+        <li>
           <a href="about" onClick={() => setMenuOpen(false)}>
             About Us
           </a>
@@ -512,34 +517,28 @@ function Footer() {
     {
       heading: "Shop",
       links: [
-        "New Arrivals",
-        "Best Sellers",
-        "Flash Deals",
-        "Gift Cards",
-        "Brands",
+        { label: "New Arrivals", href: "/products" },
+        { label: "Best Sellers", href: "/products" },
+        { label: "All Products", href: "/products" },
       ],
     },
     {
-      heading: "Sell",
+      heading: "Company",
       links: [
-        "Start Selling",
-        "Seller Hub",
-        "Seller Fees",
-        "Seller Stories",
-        "Seller Support",
+        { label: "About Us", href: "/about" },
+        { label: "Contact Us", href: "/contact" },
       ],
     },
     {
       heading: "Help",
       links: [
-        "Help Center",
-        "Track Order",
-        "Returns & Refunds",
-        "Privacy Policy",
-        "Terms of Use",
+        { label: "Help Center", href: "/contact" },
+        { label: "Privacy Policy", href: "/contact" },
+        { label: "Terms of Use", href: "/contact" },
       ],
     },
   ];
+
   return (
     <footer className="footer">
       <div className="footer__top">
@@ -549,26 +548,17 @@ function Footer() {
             Your trusted marketplace for everything — from everyday essentials
             to luxury finds, delivered fast with love.
           </p>
-          <div className="social-links">
-            {[
-              { icon: "𝕏", label: "Twitter" },
-              { icon: "f", label: "Facebook" },
-              { icon: "in", label: "LinkedIn" },
-              { icon: "▶", label: "YouTube" },
-            ].map(({ icon, label }) => (
-              <button key={label} className="social-link" aria-label={label}>
-                {icon}
-              </button>
-            ))}
-          </div>
         </div>
         {cols.map((col) => (
           <div key={col.heading} className="footer__col">
             <h4>{col.heading}</h4>
             <ul>
               {col.links.map((l) => (
-                <li key={l}>
-                  <button className="footer__link">{l}</button>
+                <li key={l.label}>
+                  <a href={l.href} className="footer__link">
+                    {l.label}
+                  </a>{" "}
+                  {/* ← <a> not <button> */}
                 </li>
               ))}
             </ul>
