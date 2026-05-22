@@ -714,3 +714,203 @@
     display: none;
   }
 }
+
+/* ════════════════════════════════════════
+   DARK MODE — Admin Products
+   ════════════════════════════════════════ */
+
+[data-theme="dark"] .ap-root {
+  background: #0f0c08;
+  color: #f5ecd5;
+}
+
+/* Header */
+[data-theme="dark"] .ap-header {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ap-header__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-header__sub {
+  color: #9a8e7f;
+}
+
+/* Toolbar + Search */
+[data-theme="dark"] .ap-toolbar {
+  background: #161209;
+  border-bottom-color: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .ap-search {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ap-search:focus-within {
+  border-color: #f5a623;
+}
+[data-theme="dark"] .ap-search__input {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-search__input::placeholder {
+  color: #9a8e7f;
+}
+
+/* Table */
+[data-theme="dark"] .ap-table-wrap {
+  background: #0f0c08;
+}
+[data-theme="dark"] .ap-table th {
+  background: #161209;
+  color: #9a8e7f;
+  border-bottom-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ap-table td {
+  border-bottom-color: rgba(245, 166, 35, 0.06);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-table tr:hover td {
+  background: rgba(245, 166, 35, 0.04);
+}
+[data-theme="dark"] .ap-table__name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-table__sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-table__cat {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-table__price {
+  color: #f5a623;
+}
+[data-theme="dark"] .ap-table__old {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-table__stock {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-table__stock--out {
+  color: #ef5350;
+}
+[data-theme="dark"] .ap-table__featured {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-table__featured--yes {
+  color: #66bb6a;
+}
+[data-theme="dark"] .ap-table__thumb {
+  border-color: rgba(245, 166, 35, 0.15);
+}
+
+/* Badges */
+[data-theme="dark"] .ap-badge--none {
+  color: #9a8e7f;
+}
+
+/* Form wrapper */
+[data-theme="dark"] .ap-form-wrap {
+  background: #0f0c08;
+}
+[data-theme="dark"] .ap-form-wrap__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-form {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ap-form__actions {
+  border-top-color: rgba(245, 166, 35, 0.1);
+}
+
+/* Fields */
+[data-theme="dark"] .ap-field__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-field__input {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-field__input::placeholder {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-field__input:focus {
+  border-color: #f5a623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] select.ap-field__input option {
+  background: #251e14;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-color-val {
+  color: #9a8e7f;
+}
+
+/* Toggle */
+[data-theme="dark"] .ap-toggle__slider {
+  background: #3a3028;
+}
+[data-theme="dark"] .ap-toggle input:checked + .ap-toggle__slider {
+  background: #f5a623;
+}
+
+/* Image uploader */
+[data-theme="dark"] .ap-dropzone {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.25);
+}
+[data-theme="dark"] .ap-dropzone:hover {
+  background: #251e14;
+  border-color: #f5a623;
+}
+[data-theme="dark"] .ap-dropzone__text {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ap-dropzone__hint {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-img-preview {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.15);
+}
+
+/* Buttons */
+[data-theme="dark"] .ap-btn--ghost {
+  background: #251e14;
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.15);
+}
+[data-theme="dark"] .ap-btn--ghost:hover {
+  background: #2e2618;
+}
+[data-theme="dark"] .ap-btn--danger-ghost {
+  background: none;
+  color: #ef5350;
+  border-color: rgba(239, 83, 80, 0.3);
+}
+[data-theme="dark"] .ap-btn--danger-ghost:hover {
+  background: rgba(239, 83, 80, 0.1);
+}
+
+/* Loading / Empty / Confirm */
+[data-theme="dark"] .ap-loading {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-empty {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-confirm-msg {
+  color: #ef5350;
+}
+
+/* Pagination */
+[data-theme="dark"] .ap-pagination {
+  background: #0f0c08;
+}
+
+/* Toast */
+[data-theme="dark"] .ap-toast--success {
+  background: #1e180f;
+  color: #f5a623;
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}

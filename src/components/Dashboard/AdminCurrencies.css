@@ -427,3 +427,111 @@
     margin-left: 0;
   }
 }
+
+/* ════════════════════════════════════════
+   DARK MODE — Admin Currencies
+   ════════════════════════════════════════ */
+
+[data-theme="dark"] .ac-root {
+  background: #0f0c08;
+  color: #f5ecd5;
+}
+
+/* Header */
+[data-theme="dark"] .ac-header {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ac-header__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ac-header__sub {
+  color: #9a8e7f;
+}
+
+/* Refresh button — dark bg on dark needs to flip */
+[data-theme="dark"] .ac-btn--refresh {
+  background: #f5a623;
+  color: #1a1208;
+}
+[data-theme="dark"] .ac-btn--refresh:hover:not(:disabled) {
+  background: #d4831a;
+}
+
+/* Live note */
+[data-theme="dark"] .ac-live-note {
+  background: rgba(102, 187, 106, 0.1);
+  border-color: rgba(102, 187, 106, 0.3);
+  color: #66bb6a;
+}
+
+/* Info box */
+[data-theme="dark"] .ac-info {
+  background: rgba(245, 166, 35, 0.08);
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+
+/* Cards */
+[data-theme="dark"] .ac-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ac-card--base {
+  background: rgba(245, 166, 35, 0.08);
+  border-color: rgba(245, 166, 35, 0.35);
+}
+[data-theme="dark"] .ac-card__code {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ac-card__name {
+  color: #9a8e7f;
+}
+
+/* Fields */
+[data-theme="dark"] .ac-field__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ac-field__input {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ac-field__input::placeholder {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ac-field__input:focus {
+  border-color: #f5a623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+
+/* Preview strip */
+[data-theme="dark"] .ac-card__preview {
+  background: #251e14;
+}
+[data-theme="dark"] .ac-card__preview-label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ac-card__preview-val {
+  color: #f5a623;
+}
+
+/* Save button — inactive state */
+[data-theme="dark"] .ac-btn--save {
+  background: #251e14;
+  color: #9a8e7f;
+  border-color: rgba(245, 236, 213, 0.1);
+}
+/* Active state is honey — same in both modes, no override needed */
+
+/* Loading */
+[data-theme="dark"] .ac-loading {
+  color: #9a8e7f;
+}
+
+/* Toast */
+[data-theme="dark"] .ac-toast--success {
+  background: #1e180f;
+  color: #f5a623;
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}

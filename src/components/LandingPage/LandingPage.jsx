@@ -3,6 +3,7 @@ import { useSite } from "./SiteContext";
 import { useCurrency } from "../Currency/CurrencyContext";
 import CurrencySwitcher from "../Currency/CurrencySwitcher";
 import "./LandingPage.css";
+import ThemeToggle from "../Theme/ThemeToggle";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
@@ -62,6 +63,9 @@ function Navbar() {
         </li>
         <li>
           <CurrencySwitcher />
+        </li>
+        <li>
+          <ThemeToggle />
         </li>
         <li>
           <a

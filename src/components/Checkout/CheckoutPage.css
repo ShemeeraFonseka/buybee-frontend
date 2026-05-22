@@ -949,3 +949,279 @@ body {
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* ════════════════════════════════════════
+   DARK MODE — Checkout
+   ════════════════════════════════════════ */
+
+/* Nav */
+[data-theme="dark"] .ck-nav {
+  background: rgba(15, 12, 8, 0.95);
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ck-nav__logo {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-nav__title {
+  color: #9a8e7f;
+}
+
+/* Step bar */
+[data-theme="dark"] .ck-steps__circle {
+  background: #251e14;
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-steps__circle.active {
+  background: #f5a623;
+  color: #1a1208;
+}
+[data-theme="dark"] .ck-steps__circle.done {
+  background: #27ae60;
+  color: #fff;
+}
+[data-theme="dark"] .ck-steps__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-steps__label.active {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-steps__line {
+  background: #251e14;
+}
+[data-theme="dark"] .ck-steps__line.done {
+  background: #27ae60;
+}
+
+/* Section card */
+[data-theme="dark"] .ck-section {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-section__title {
+  color: #f5ecd5;
+}
+
+/* Fields */
+[data-theme="dark"] .ck-field__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-input {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-input::placeholder {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-input:focus {
+  border-color: #f5a623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+
+/* Payment options */
+[data-theme="dark"] .ck-payment-option {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-payment-option--active {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .ck-payment-option__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-payment-option__sub {
+  color: #9a8e7f;
+}
+
+/* Card form */
+[data-theme="dark"] .ck-card-form {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ck-card-form__note {
+  background: rgba(245, 166, 35, 0.08);
+  color: #9a8e7f;
+}
+
+/* Payment inline (shipping step) */
+[data-theme="dark"] .ck-pay-opt {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-pay-opt--active {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.08);
+}
+
+/* Actions bar */
+[data-theme="dark"] .ck-actions {
+  border-top-color: rgba(245, 166, 35, 0.1);
+}
+
+/* Error banner */
+[data-theme="dark"] .ck-error {
+  background: rgba(198, 40, 40, 0.1);
+  border-color: rgba(198, 40, 40, 0.3);
+  color: #ef9a9a;
+}
+
+/* Buttons */
+[data-theme="dark"] .ck-btn--ghost {
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.15);
+}
+[data-theme="dark"] .ck-btn--ghost:hover {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .ck-btn--place {
+  background: #f5a623;
+  color: #1a1208;
+  box-shadow: 0 6px 20px rgba(245, 166, 35, 0.25);
+}
+[data-theme="dark"] .ck-btn--place:hover:not(:disabled) {
+  background: #d4831a;
+}
+
+/* Review card */
+[data-theme="dark"] .ck-review-card {
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-review-card__header {
+  background: rgba(245, 166, 35, 0.08);
+  color: #f5a623;
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ck-review-card__body {
+  background: #1e180f;
+  color: #f5ecd5;
+}
+
+/* Review items */
+[data-theme="dark"] .ck-review-items {
+  background: #1e180f;
+}
+[data-theme="dark"] .ck-review-item {
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ck-review-item__name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-review-item__qty {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-review-item__price {
+  color: #f5a623;
+}
+
+/* Review totals */
+[data-theme="dark"] .ck-review-totals {
+  border-top-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ck-review-totals__row {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-review-totals__row--total {
+  color: #f5ecd5;
+  border-top-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-review-totals__row--total span:last-child {
+  color: #f5a623;
+}
+
+/* Order summary sidebar */
+[data-theme="dark"] .ck-summary {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-summary__title {
+  color: #f5ecd5;
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ck-summary__item-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-summary__item-cat {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-summary__item-price {
+  color: #f5a623;
+}
+[data-theme="dark"] .ck-summary__item-qty {
+  background: #f5a623;
+  color: #1a1208;
+}
+[data-theme="dark"] .ck-summary__totals {
+  border-top-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ck-summary__row {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-summary__row--total {
+  color: #f5ecd5;
+  border-top-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-summary__row--total span:last-child {
+  color: #f5a623;
+}
+
+/* Confirmation page */
+[data-theme="dark"] .ck-confirm {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .ck-confirm__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ck-confirm__sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-confirm__number {
+  background: rgba(245, 166, 35, 0.08);
+  border-color: rgba(245, 166, 35, 0.25);
+  color: #f5a623;
+}
+[data-theme="dark"] .ck-confirm__email {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-confirm__summary {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-confirm__summary-header {
+  background: rgba(245, 166, 35, 0.08);
+  color: #f5a623;
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ck-confirm__item {
+  color: #f5ecd5;
+  border-bottom-color: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .ck-confirm__item--shipping {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-confirm__item--total {
+  background: #1e180f;
+  border-top-color: rgba(245, 166, 35, 0.15) !important;
+}
+[data-theme="dark"] .ck-confirm__item--total span:last-child {
+  color: #f5a623;
+}
+[data-theme="dark"] .ck-confirm__delivery {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ck-confirm__delivery-title {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ck-confirm__delivery-addr {
+  color: #f5ecd5;
+}
+
+/* Empty cart */
+[data-theme="dark"] .ck-empty-cart {
+  color: #9a8e7f;
+}

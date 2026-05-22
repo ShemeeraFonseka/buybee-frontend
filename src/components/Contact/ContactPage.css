@@ -497,3 +497,96 @@
   max-width: 680px;
   margin: 0 auto;
 }
+
+/* ─── DARK MODE ─── */
+[data-theme="dark"] .cp-root {
+  background: #0f0c08;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-nav {
+  background: rgba(10, 8, 5, 0.95);
+  border-bottom-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .cp-logo {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-logo__icon {
+  background: var(--honey);
+}
+[data-theme="dark"] .cp-nav__links a {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cp-nav__links a:hover,
+[data-theme="dark"] .cp-nav__links a.active {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-hero {
+  background: #0f0c08;
+}
+[data-theme="dark"] .cp-hero__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-hero__title em {
+  color: var(--honey);
+}
+[data-theme="dark"] .cp-hero__sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cp-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .cp-card__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-card__line {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cp-form-wrap {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .cp-form-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-form-sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cp-field__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cp-field__input {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-field__input::placeholder {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cp-faq {
+  background: #0a0805;
+}
+[data-theme="dark"] .cp-faq__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-faq__item {
+  background: rgba(245, 236, 213, 0.04);
+  border-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .cp-faq__q {
+  color: var(--honey);
+}
+[data-theme="dark"] .cp-faq__a {
+  color: rgba(245, 236, 213, 0.6);
+}
+[data-theme="dark"] .cp-footer {
+  background: #0a0805;
+  color: rgba(245, 236, 213, 0.45);
+  border-top-color: rgba(245, 236, 213, 0.06);
+}
+[data-theme="dark"] .cp-success h3 {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cp-success p {
+  color: #9a8e7f;
+}

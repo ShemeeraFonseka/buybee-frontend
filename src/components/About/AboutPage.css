@@ -729,3 +729,127 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── DARK MODE ─── */
+[data-theme="dark"] .ab-root {
+  background: #0f0c08;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-nav {
+  background: rgba(10, 8, 5, 0.95);
+  border-bottom-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ab-logo {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-nav__links a {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ab-nav__links a:hover,
+[data-theme="dark"] .ab-nav__links a.active {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-hero {
+  background: #0f0c08;
+}
+[data-theme="dark"] .ab-hero__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-hero__sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ab-stats {
+  background: #0a0805;
+}
+[data-theme="dark"] .ab-stat__label {
+  color: rgba(245, 236, 213, 0.5);
+}
+[data-theme="dark"] .ab-stat:not(:last-child) {
+  border-right-color: rgba(245, 236, 213, 0.08);
+}
+[data-theme="dark"] .ab-mission {
+  background: #0f0c08;
+}
+[data-theme="dark"] .ab-section-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-section-label {
+  color: var(--honey-dark);
+}
+[data-theme="dark"] .ab-mission__body {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ab-mission__img-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ab-mission__img-card div {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-values {
+  background: #161209;
+}
+[data-theme="dark"] .ab-value-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ab-value-card__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-value-card__desc {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ab-timeline {
+  background: #0f0c08;
+}
+[data-theme="dark"] .ab-timeline__line {
+  background: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ab-timeline__year {
+  color: var(--honey-dark);
+}
+[data-theme="dark"] .ab-timeline__card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ab-timeline__card-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-timeline__card-desc {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ab-team {
+  background: #161209;
+}
+[data-theme="dark"] .ab-team__card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ab-team__name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-team__role {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ab-cta {
+  background: #0a0805;
+}
+[data-theme="dark"] .ab-cta__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ab-cta__sub {
+  color: rgba(245, 236, 213, 0.55);
+}
+[data-theme="dark"] .ab-footer {
+  background: #0a0805;
+  color: rgba(245, 236, 213, 0.45);
+  border-top-color: rgba(245, 236, 213, 0.06);
+}
+[data-theme="dark"] .ab-btn--ghost {
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.2);
+}
+[data-theme="dark"] .ab-btn--ghost:hover {
+  border-color: var(--honey);
+  background: rgba(245, 166, 35, 0.1);
+}

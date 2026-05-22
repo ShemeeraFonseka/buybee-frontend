@@ -1,0 +1,106 @@
+/* ════════════════════════════════════════
+   BUYBEE THEME SYSTEM
+   Applied via data-theme="light"|"dark" on <html>
+   ════════════════════════════════════════ */
+
+/* ─── Light mode (default) ─── */
+:root,
+[data-theme="light"] {
+  --honey: #f5a623;
+  --honey-dark: #d4831a;
+  --honey-light: #fff3dc;
+  --bee-black: #1a1208;
+  --bee-dark: #2d2010;
+  --cream: #fffcf5;
+  --warm-gray: #8a7d6b;
+  --border: rgba(245, 166, 35, 0.2);
+  --white: #ffffff;
+
+  /* Semantic tokens */
+  --bg: #fffcf5;
+  --bg-2: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f5f0e8;
+  --surface-3: #ede8df;
+  --text: #1a1208;
+  --text-2: #4a3f35;
+  --text-muted: #8a7d6b;
+  --nav-bg: rgba(255, 252, 245, 0.92);
+  --card-bg: #ffffff;
+  --card-border: rgba(245, 166, 35, 0.2);
+  --input-bg: #fffcf5;
+  --input-border: rgba(245, 166, 35, 0.25);
+  --shadow: rgba(0, 0, 0, 0.08);
+  --shadow-lg: rgba(0, 0, 0, 0.12);
+  --stats-bg: #1a1208;
+  --stats-text: rgba(255, 255, 255, 0.5);
+  --footer-bg: #1a1208;
+  --footer-text: rgba(255, 255, 255, 0.45);
+  --overlay: rgba(26, 18, 8, 0.45);
+}
+
+/* ─── Dark mode ─── */
+[data-theme="dark"] {
+  --honey: #f5a623;
+  --honey-dark: #e8941a;
+  --honey-light: rgba(245, 166, 35, 0.12);
+  --bee-black: #f5ecd5; /* flips to light text */
+  --bee-dark: #e8d9bc;
+  --cream: #0f0c08; /* flips to dark bg */
+  --warm-gray: #9a8e7f;
+  --border: rgba(245, 166, 35, 0.15);
+  --white: #1e180f; /* flips to dark surface */
+
+  /* Semantic tokens */
+  --bg: #0f0c08;
+  --bg-2: #161209;
+  --surface: #1e180f;
+  --surface-2: #251e14;
+  --surface-3: #2e2618;
+  --text: #f5ecd5;
+  --text-2: #d4c4a8;
+  --text-muted: #9a8e7f;
+  --nav-bg: rgba(15, 12, 8, 0.95);
+  --card-bg: #1e180f;
+  --card-border: rgba(245, 166, 35, 0.12);
+  --input-bg: #251e14;
+  --input-border: rgba(245, 166, 35, 0.2);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-lg: rgba(0, 0, 0, 0.6);
+  --stats-bg: #0a0805;
+  --stats-text: rgba(245, 236, 213, 0.5);
+  --footer-bg: #0a0805;
+  --footer-text: rgba(245, 236, 213, 0.4);
+  --overlay: rgba(0, 0, 0, 0.65);
+}
+
+/* ─── Smooth theme transitions ─── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Don't transition animations or transforms */
+*[class*="animate"],
+*[class*="spinner"],
+*[class*="float"] {
+  transition: none !important;
+}
+
+/* ─── Base overrides using semantic tokens ─── */
+html {
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}

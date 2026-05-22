@@ -1251,3 +1251,456 @@
     border-radius: 0;
   }
 }
+
+/* ════════════════════════════════════════
+   DARK MODE — POS
+   ════════════════════════════════════════ */
+
+/* Root */
+[data-theme="dark"] .pos-root {
+  background: #0a0805;
+  color: #f5ecd5;
+}
+
+/* ── Topbar ── */
+[data-theme="dark"] .pos-session-badge--open {
+  background: rgba(39, 174, 96, 0.15);
+  color: #66bb6a;
+  border-color: rgba(102, 187, 106, 0.4);
+}
+[data-theme="dark"] .pos-session-badge--closed {
+  background: rgba(229, 57, 53, 0.15);
+  color: #ef5350;
+  border-color: rgba(239, 83, 80, 0.4);
+}
+
+/* ── Products panel ── */
+[data-theme="dark"] .pos-products {
+  background: #161209;
+  border-right-color: rgba(245, 166, 35, 0.1);
+}
+
+/* ── Search bar (dark by design, minor tweaks only) ── */
+[data-theme="dark"] .pos-search span {
+  color: rgba(245, 236, 213, 0.4);
+}
+[data-theme="dark"] .pos-search__clear {
+  color: rgba(245, 236, 213, 0.4);
+}
+[data-theme="dark"] .pos-search__clear:hover {
+  color: #f5ecd5;
+}
+
+/* ── Category tabs ── */
+[data-theme="dark"] .pos-cats {
+  background: #0f0c08;
+  border-bottom-color: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .pos-cat {
+  color: #9a8e7f;
+  border-color: rgba(245, 236, 213, 0.1);
+}
+[data-theme="dark"] .pos-cat:hover {
+  border-color: #f5a623;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-cat--active {
+  background: #f5a623;
+  border-color: #f5a623;
+  color: #1a1208;
+}
+
+/* ── Product grid ── */
+[data-theme="dark"] .pos-grid {
+  background: #161209;
+}
+[data-theme="dark"] .pos-product {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-product:hover:not(:disabled) {
+  border-color: #f5a623;
+  box-shadow: 0 6px 20px rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .pos-product__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-product__price {
+  color: #f5a623;
+}
+[data-theme="dark"] .pos-no-products {
+  color: #9a8e7f;
+}
+
+/* ── Cart panel ── */
+[data-theme="dark"] .pos-cart {
+  background: #0f0c08;
+  border-left-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-cart__header {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-cart__header .pos-btn--ghost {
+  background: #251e14;
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.15);
+}
+[data-theme="dark"] .pos-cart__header .pos-btn--ghost:hover {
+  background: #2e2618;
+}
+[data-theme="dark"] .pos-cart__empty {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-cart__empty-hint {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-cart__items {
+  background: #0f0c08;
+}
+[data-theme="dark"] .pos-cart__item {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-cart__item-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-cart__item-price {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-cart__item-qty {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-cart__item-total {
+  color: #f5a623;
+}
+[data-theme="dark"] .pos-cart__item-remove {
+  color: rgba(245, 236, 213, 0.2);
+}
+[data-theme="dark"] .pos-cart__item-remove:hover {
+  color: #ef5350;
+}
+[data-theme="dark"] .pos-qty-btn {
+  background: #251e14;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-qty-btn:hover {
+  background: #f5a623;
+  color: #1a1208;
+}
+[data-theme="dark"] .pos-cart__footer {
+  background: #1e180f;
+  border-top-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-cart__subtotal {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-cart__subtotal span:last-child {
+  color: #f5a623;
+}
+
+/* ── Recent sales ── */
+[data-theme="dark"] .pos-recent {
+  border-top-color: rgba(245, 166, 35, 0.1);
+  background: #0f0c08;
+}
+[data-theme="dark"] .pos-recent__title {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-recent__item:hover {
+  background: #1e180f;
+}
+[data-theme="dark"] .pos-recent__num {
+  color: #f5a623;
+}
+[data-theme="dark"] .pos-recent__items {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-recent__total {
+  color: #f5ecd5;
+}
+
+/* ── Toggle buttons (payment method, cash in/out) ── */
+[data-theme="dark"] .pos-toggle {
+  background: #251e14;
+  border-color: rgba(245, 236, 213, 0.1);
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-toggle.active {
+  background: #f5a623;
+  border-color: #f5a623;
+  color: #1a1208;
+}
+
+/* ── Form inputs ── */
+[data-theme="dark"] .pos-field label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-input {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-input::placeholder {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-input:focus {
+  border-color: #f5a623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-checkbox {
+  color: #f5ecd5;
+}
+
+/* ── Quick amounts ── */
+[data-theme="dark"] .quick-amount {
+  background: #251e14;
+  border-color: rgba(245, 236, 213, 0.1);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .quick-amount:hover {
+  background: rgba(245, 166, 35, 0.1);
+  border-color: #f5a623;
+}
+[data-theme="dark"] .quick-amount--exact {
+  background: rgba(245, 166, 35, 0.12);
+  border-color: rgba(245, 166, 35, 0.4);
+  color: #f5a623;
+}
+
+/* ── Change display ── */
+[data-theme="dark"] .change-display--ok {
+  background: rgba(39, 174, 96, 0.12);
+  color: #66bb6a;
+}
+[data-theme="dark"] .change-display--short {
+  background: rgba(229, 57, 53, 0.12);
+  color: #ef5350;
+}
+
+/* ── Modal overlay ── */
+[data-theme="dark"] .pos-modal-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* ── Modal base (shift, checkout, receipt) ── */
+[data-theme="dark"] .pos-modal {
+  background: #1e180f;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+[data-theme="dark"] .pos-modal__header {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-modal__header h2 {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-modal__tabs {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .pos-modal__tab {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .pos-modal__tab.active {
+  color: #f5ecd5;
+  border-bottom-color: #f5a623;
+}
+[data-theme="dark"] .pos-modal__tab:hover {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .pos-modal__body {
+  background: #1e180f;
+}
+[data-theme="dark"] .pos-modal__body--checkout {
+  background: #1e180f;
+}
+
+/* Ghost buttons inside modals */
+[data-theme="dark"] .pos-modal .pos-btn--ghost {
+  background: rgba(245, 236, 213, 0.06);
+  color: rgba(245, 236, 213, 0.7);
+  border-color: rgba(245, 236, 213, 0.12);
+}
+[data-theme="dark"] .pos-modal .pos-btn--ghost:hover {
+  background: rgba(245, 236, 213, 0.1);
+  color: #f5ecd5;
+}
+
+/* ── Customer display modal — must stay near-black regardless ── */
+[data-theme="dark"] .pos-modal.pos-modal--display {
+  background: #0a0805;
+}
+[data-theme="dark"] .pos-modal--display > .pos-btn--ghost {
+  background: rgba(245, 236, 213, 0.08);
+  color: rgba(245, 236, 213, 0.75);
+  border-color: rgba(245, 236, 213, 0.15);
+  margin-bottom: 16px;
+}
+[data-theme="dark"] .pos-modal--display > .pos-btn--ghost:hover {
+  background: rgba(245, 236, 213, 0.13);
+  color: #f5ecd5;
+}
+
+/* ── Checkout summary ── */
+[data-theme="dark"] .checkout-summary {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .checkout-summary__title {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .checkout-summary__item {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .checkout-summary__divider {
+  border-top-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .checkout-summary__row {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .checkout-summary__row--discount span:last-child {
+  color: #66bb6a;
+}
+[data-theme="dark"] .checkout-summary__total {
+  border-top-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .checkout-summary__total span:last-child {
+  color: #f5a623;
+}
+[data-theme="dark"] .receipt-toggles {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.1);
+  color: #f5ecd5;
+}
+
+/* ── Shift modal ── */
+[data-theme="dark"] .shift-status__row {
+  background: #251e14;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .shift-status__row span:first-child {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .shift-status__row strong {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .shift-status__row--highlight {
+  background: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .shift-status__row--highlight span:first-child {
+  color: #d4a843;
+}
+[data-theme="dark"] .shift-status__row--highlight strong {
+  color: #f5a623;
+}
+[data-theme="dark"] .cash-movements__title {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cash-movement {
+  border-bottom-color: rgba(245, 166, 35, 0.08);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cash-movement__type--opening {
+  background: rgba(21, 101, 192, 0.15);
+  color: #64b5f6;
+}
+[data-theme="dark"] .cash-movement__type--closing {
+  background: rgba(106, 27, 154, 0.15);
+  color: #ce93d8;
+}
+[data-theme="dark"] .cash-movement__type--in {
+  background: rgba(39, 174, 96, 0.12);
+  color: #66bb6a;
+}
+[data-theme="dark"] .cash-movement__type--out {
+  background: rgba(198, 40, 40, 0.12);
+  color: #ef9a9a;
+}
+[data-theme="dark"] .cash-movement__note {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .cash-movement__amount {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .shift-difference.positive {
+  background: rgba(39, 174, 96, 0.12);
+  color: #66bb6a;
+}
+[data-theme="dark"] .shift-difference.negative {
+  background: rgba(229, 57, 53, 0.12);
+  color: #ef5350;
+}
+
+/* ── Receipt preview (on-screen only — print iframe uses its own styles) ── */
+[data-theme="dark"] .r-header {
+  border-bottom-color: rgba(245, 236, 213, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .r-logo {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .r-sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .r-row {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .r-item-name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .r-divider {
+  border-top-color: rgba(245, 236, 213, 0.2);
+}
+[data-theme="dark"] .r-total {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .r-change {
+  background: #251e14;
+  color: #f5a623;
+}
+[data-theme="dark"] .r-footer {
+  color: #9a8e7f;
+}
+
+/* ── Toast ── */
+[data-theme="dark"] .pos-toast {
+  background: #1e180f;
+  color: #f5a623;
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}
+
+/* ── Mobile overrides ── */
+@media (max-width: 768px) {
+  [data-theme="dark"] .pos-cart {
+    border-top-color: #f5a623;
+  }
+  [data-theme="dark"] .pos-cart__footer {
+    border-left-color: rgba(245, 166, 35, 0.1);
+  }
+}
+
+/* ── DARK MODE: fix var(--bee-black) background flip ── */
+
+/* Topbar uses var(--bee-black) as bg — pin it to true dark */
+[data-theme="dark"] .pos-topbar {
+  background: #1a1208;
+}
+
+/* Search bar also uses var(--bee-black) as bg */
+[data-theme="dark"] .pos-search {
+  background: #1a1208;
+}
+
+/* Recent sales total amount color */
+[data-theme="dark"] .pos-recent__total {
+  color: #f5ecd5;
+}
+
+/* Cart empty icon inherits color fine but the emoji
+   container needs explicit bg match */
+[data-theme="dark"] .pos-cart__items {
+  background: #0f0c08;
+}

@@ -487,3 +487,150 @@
     display: none;
   }
 }
+
+/* ════════════════════════════════════════
+   DARK MODE — Admin Users
+   ════════════════════════════════════════ */
+
+[data-theme="dark"] .au-root {
+  background: #0f0c08;
+  color: #f5ecd5;
+}
+
+/* Header */
+[data-theme="dark"] .au-header {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .au-header__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .au-header__sub {
+  color: #9a8e7f;
+}
+
+/* Form */
+[data-theme="dark"] .au-form-wrap {
+  background: #0f0c08;
+}
+[data-theme="dark"] .au-form-wrap__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .au-form {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .au-form__actions {
+  border-top-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .au-field__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .au-field__input {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .au-field__input::placeholder {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .au-field__input:focus {
+  border-color: #f5a623;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .au-field__eye {
+  color: #9a8e7f;
+}
+
+/* Table */
+[data-theme="dark"] .au-table-wrap {
+  background: #0f0c08;
+}
+[data-theme="dark"] .au-table th {
+  background: #161209;
+  color: #9a8e7f;
+  border-bottom-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .au-table td {
+  border-bottom-color: rgba(245, 166, 35, 0.06);
+}
+[data-theme="dark"] .au-table tr:hover td {
+  background: rgba(245, 166, 35, 0.04);
+}
+
+/* User cell */
+[data-theme="dark"] .au-avatar {
+  background: rgba(245, 166, 35, 0.12);
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #f5a623;
+}
+[data-theme="dark"] .au-user-name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .au-you {
+  background: rgba(245, 166, 35, 0.12);
+  color: #f5a623;
+}
+[data-theme="dark"] .au-email {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .au-last-login {
+  color: #9a8e7f;
+}
+
+/* Role badge — color-mix needs dark base to mix against */
+[data-theme="dark"] .au-badge {
+  background: color-mix(in srgb, var(--c) 18%, #1e180f);
+  border-color: color-mix(in srgb, var(--c) 35%, transparent);
+}
+
+/* Status toggle */
+[data-theme="dark"] .au-status-toggle--active {
+  color: #66bb6a;
+  border-color: rgba(102, 187, 106, 0.35);
+}
+[data-theme="dark"] .au-status-toggle--active:hover {
+  background: rgba(102, 187, 106, 0.1);
+}
+[data-theme="dark"] .au-status-toggle--inactive {
+  color: #9a8e7f;
+  border-color: rgba(245, 236, 213, 0.12);
+}
+[data-theme="dark"] .au-status-toggle--inactive:hover {
+  background: #251e14;
+}
+
+/* Confirm message */
+[data-theme="dark"] .au-confirm-msg {
+  color: #ef5350;
+}
+
+/* Buttons */
+[data-theme="dark"] .au-btn--ghost {
+  background: #251e14;
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.15);
+}
+[data-theme="dark"] .au-btn--ghost:hover {
+  background: #2e2618;
+}
+[data-theme="dark"] .au-btn--danger-ghost {
+  background: none;
+  color: #ef5350;
+  border-color: rgba(239, 83, 80, 0.3);
+}
+[data-theme="dark"] .au-btn--danger-ghost:hover {
+  background: rgba(239, 83, 80, 0.1);
+}
+
+/* Loading */
+[data-theme="dark"] .au-loading {
+  color: #9a8e7f;
+}
+
+/* Toast */
+[data-theme="dark"] .au-toast--success {
+  background: #1e180f;
+  color: #f5a623;
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}

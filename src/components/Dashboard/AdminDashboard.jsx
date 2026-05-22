@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useSite } from "../LandingPage/SiteContext";
 import { useAuth } from "../Auth/AuthContext";
 import "./AdminDashboard.css";
+import { useTheme } from "../Theme/ThemeContext";
+import ThemeToggle from "../Theme/ThemeToggle";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
@@ -1410,6 +1412,7 @@ export default function AdminDashboard() {
               site.
             </p>
           </div>
+          <ThemeToggle />
         </div>
 
         {lowStock.length > 0 && (

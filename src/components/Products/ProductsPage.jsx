@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCurrency } from "../Currency/CurrencyContext";
 import CurrencySwitcher from "../Currency/CurrencySwitcher";
 import "./ProductsPage.css";
+import ThemeToggle from "../Theme/ThemeToggle";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 const PRODUCTS_API = `${API_BASE}/api/products`;
@@ -377,10 +378,8 @@ export default function ProductsPage() {
         </div>
 
         <div className="pp-nav__actions">
-          <a href="/" className="pp-nav__link">
-            Home
-          </a>
           <CurrencySwitcher />
+          <ThemeToggle />
           <button
             className="pp-nav__cart-btn"
             onClick={() => setCartOpen(true)}

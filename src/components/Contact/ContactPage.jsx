@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./ContactPage.css";
 import CurrencySwitcher from "../Currency/CurrencySwitcher";
+import ThemeToggle from "../Theme/ThemeToggle";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
@@ -39,6 +40,9 @@ function Navbar() {
         </li>
         <li>
           <CurrencySwitcher />
+        </li>
+        <li>
+          <ThemeToggle />
         </li>
         <li>
           <a

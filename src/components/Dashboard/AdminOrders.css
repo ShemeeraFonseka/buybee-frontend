@@ -784,3 +784,261 @@
     display: none;
   }
 }
+
+/* ════════════════════════════════════════
+   DARK MODE — Admin Orders
+   ════════════════════════════════════════ */
+
+[data-theme="dark"] .ao-root {
+  background: #0f0c08;
+  color: #f5ecd5;
+}
+
+/* Header */
+[data-theme="dark"] .ao-header {
+  background: #1e180f;
+  border-bottom-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ao-header__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-header__sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-stat__num {
+  color: #f5a623;
+}
+[data-theme="dark"] .ao-stat__label {
+  color: #9a8e7f;
+}
+
+/* Tabs */
+[data-theme="dark"] .ao-tabs {
+  background: #161209;
+  border-bottom-color: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .ao-tab {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-tab:hover {
+  background: rgba(245, 166, 35, 0.1);
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-tab--active {
+  background: #f5a623;
+  color: #1a1208;
+}
+[data-theme="dark"] .ao-tab__count {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Toolbar + Search */
+[data-theme="dark"] .ao-toolbar {
+  background: #161209;
+  border-bottom-color: rgba(245, 166, 35, 0.08);
+}
+[data-theme="dark"] .ao-search {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ao-search:focus-within {
+  border-color: #f5a623;
+}
+[data-theme="dark"] .ao-search__input {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-search__input::placeholder {
+  color: #9a8e7f;
+}
+
+/* Table */
+[data-theme="dark"] .ao-table-wrap {
+  background: #0f0c08;
+}
+[data-theme="dark"] .ao-table th {
+  background: #161209;
+  color: #9a8e7f;
+  border-bottom-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ao-table td {
+  border-bottom-color: rgba(245, 166, 35, 0.06);
+}
+[data-theme="dark"] .ao-table__row:hover td {
+  background: rgba(245, 166, 35, 0.04);
+}
+[data-theme="dark"] .ao-order-num {
+  color: #f5a623;
+}
+[data-theme="dark"] .ao-customer__name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-customer__email {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-date {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-items-count {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-total {
+  color: #f5ecd5;
+}
+
+/* Badge — uses color-mix so only needs overlay tweak for dark bg */
+[data-theme="dark"] .ao-badge {
+  background: color-mix(in srgb, var(--badge-color) 20%, #1e180f);
+  border-color: color-mix(in srgb, var(--badge-color) 35%, transparent);
+}
+
+/* Buttons */
+[data-theme="dark"] .ao-btn--ghost {
+  background: #251e14;
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.15);
+}
+[data-theme="dark"] .ao-btn--ghost:hover {
+  background: #2e2618;
+}
+[data-theme="dark"] .ao-btn--danger-ghost {
+  background: none;
+  color: #ef5350;
+  border-color: rgba(239, 83, 80, 0.3);
+}
+[data-theme="dark"] .ao-btn--danger-ghost:hover {
+  background: rgba(239, 83, 80, 0.1);
+}
+
+/* Pagination */
+[data-theme="dark"] .ao-pagination {
+  background: #0f0c08;
+}
+
+/* Loading / Empty */
+[data-theme="dark"] .ao-loading {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-empty {
+  color: #9a8e7f;
+}
+
+/* Toast */
+[data-theme="dark"] .ao-toast--success {
+  background: #1e180f;
+  color: #f5a623;
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}
+
+/* ─── MODAL ─── */
+[data-theme="dark"] .ao-modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+[data-theme="dark"] .ao-modal {
+  background: #1e180f;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+[data-theme="dark"] .ao-modal__header {
+  border-bottom-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .ao-modal__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-modal__date {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-modal__close {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-modal__close:hover {
+  background: #2e2618;
+}
+[data-theme="dark"] .ao-modal__section-title {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-modal__row {
+  border-bottom-color: rgba(245, 166, 35, 0.1);
+}
+[data-theme="dark"] .ao-modal__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-modal__row span:last-child {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-modal__row--discount span:last-child {
+  color: #66bb6a;
+}
+[data-theme="dark"] .ao-modal__row--total {
+  border-top-color: rgba(245, 166, 35, 0.2);
+}
+[data-theme="dark"] .ao-modal__row--total span:last-child {
+  color: #f5a623;
+}
+
+/* Modal items */
+[data-theme="dark"] .ao-modal__item {
+  background: #251e14;
+}
+[data-theme="dark"] .ao-modal__item-img {
+  background: #2e2618;
+  border-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ao-modal__item-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-modal__item-cat {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-modal__item-qty {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-modal__item-price {
+  color: #f5a623;
+}
+[data-theme="dark"] .ao-modal__totals {
+  background: #251e14;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+
+/* Status flow */
+[data-theme="dark"] .ao-status-step {
+  background: #251e14;
+  border-color: rgba(245, 236, 213, 0.1);
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-status-step:hover:not(:disabled) {
+  background: rgba(245, 166, 35, 0.1);
+  border-color: #f5a623;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-status-step--active {
+  background: #f5a623;
+  border-color: #f5a623;
+  color: #1a1208;
+}
+[data-theme="dark"] .ao-status-step--done {
+  background: rgba(102, 187, 106, 0.12);
+  border-color: rgba(102, 187, 106, 0.35);
+  color: #66bb6a;
+}
+[data-theme="dark"] .ao-status-step--cancel.ao-status-step--active {
+  background: rgba(239, 83, 80, 0.15);
+  border-color: rgba(239, 83, 80, 0.4);
+  color: #ef5350;
+}
+
+/* Payment buttons */
+[data-theme="dark"] .ao-pay-btn {
+  background: #251e14;
+  border-color: rgba(245, 236, 213, 0.1);
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ao-pay-btn:hover:not(:disabled) {
+  background: rgba(245, 166, 35, 0.1);
+  border-color: #f5a623;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .ao-pay-btn--active {
+  background: #f5a623;
+  border-color: #f5a623;
+  color: #1a1208;
+}

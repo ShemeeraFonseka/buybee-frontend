@@ -263,14 +263,17 @@ body {
 }
 
 .footer__link {
-  /* remove: background, border, padding */
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: "Nunito", sans-serif;
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.45);
-  text-decoration: none; /* ← add */
   cursor: pointer;
+  text-align: left;
   transition: color 0.2s;
-  display: inline-block; /* ← add */
 }
+
 .footer__link:hover {
   color: var(--honey);
 }
@@ -1513,4 +1516,399 @@ body {
   .nav__links--open li {
     display: block !important;
   }
+}
+
+/* ════════════════════════════════════════
+   DARK MODE OVERRIDES — LandingPage
+   ════════════════════════════════════════ */
+[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Nav */
+[data-theme="dark"] .nav {
+  background: var(--nav-bg);
+  border-bottom-color: var(--border);
+}
+[data-theme="dark"] .nav__links a {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .nav__links a:hover {
+  color: var(--text);
+}
+[data-theme="dark"] .nav__logo {
+  color: var(--text);
+}
+
+/* Hero */
+[data-theme="dark"] .hero {
+  background: var(--bg);
+}
+
+/* Stats */
+[data-theme="dark"] .stats {
+  background: var(--stats-bg);
+}
+[data-theme="dark"] .stats__label {
+  color: var(--stats-text);
+}
+[data-theme="dark"] .stats__item {
+  border-right-color: rgba(245, 236, 213, 0.08);
+}
+
+/* Feature cards */
+[data-theme="dark"] .feature-card {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+}
+[data-theme="dark"] .feature-card__icon {
+  background: var(--honey-light);
+}
+[data-theme="dark"] .feature-card__title {
+  color: var(--text);
+}
+[data-theme="dark"] .feature-card__desc {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .section {
+  background: var(--bg);
+}
+
+/* Categories */
+[data-theme="dark"] .categories {
+  background: var(--surface-2);
+}
+[data-theme="dark"] .cat-card {
+  background: var(--card-bg);
+  border-color: transparent;
+}
+[data-theme="dark"] .cat-card:hover {
+  border-color: var(--honey);
+}
+[data-theme="dark"] .cat-card__name {
+  color: var(--text);
+}
+[data-theme="dark"] .cat-card__count {
+  color: var(--text-muted);
+}
+
+/* Product cards */
+[data-theme="dark"] .product-card {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+}
+[data-theme="dark"] .product-card__title {
+  color: var(--text);
+}
+[data-theme="dark"] .product-card__cat {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .product-card__stars span {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .product-card__wishlist {
+  background: var(--surface-3);
+}
+
+/* Promo banner */
+[data-theme="dark"] .promo-banner {
+  background: var(--surface);
+}
+
+/* Testimonials */
+[data-theme="dark"] .testimonials {
+  background: var(--surface-2);
+}
+[data-theme="dark"] .testimonial-card {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+}
+[data-theme="dark"] .testimonial-card__text {
+  color: var(--text-2);
+}
+[data-theme="dark"] .author-name {
+  color: var(--text);
+}
+[data-theme="dark"] .author-role {
+  color: var(--text-muted);
+}
+
+/* Newsletter */
+[data-theme="dark"] .newsletter {
+  background: var(--surface-2);
+}
+[data-theme="dark"] .newsletter__form {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+}
+[data-theme="dark"] .newsletter__input {
+  color: var(--text);
+  background: transparent;
+}
+[data-theme="dark"] .newsletter__input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Footer */
+[data-theme="dark"] .footer {
+  background: var(--footer-bg);
+}
+[data-theme="dark"] .footer__brand p {
+  color: var(--footer-text);
+}
+[data-theme="dark"] .footer__col h4 {
+  color: var(--text);
+}
+[data-theme="dark"] .footer__link {
+  color: var(--footer-text);
+}
+[data-theme="dark"] .footer__link:hover {
+  color: var(--honey);
+}
+[data-theme="dark"] .footer__bottom {
+  border-top-color: rgba(245, 236, 213, 0.06);
+  color: var(--footer-text);
+}
+[data-theme="dark"] .social-link {
+  background: rgba(245, 236, 213, 0.06);
+  color: var(--footer-text);
+}
+
+/* Showcase cards */
+[data-theme="dark"] .showcase__card {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+}
+[data-theme="dark"] .showcase__card-label {
+  color: var(--text);
+}
+
+/* Hamburger */
+[data-theme="dark"] .nav__hamburger {
+  color: var(--text);
+}
+[data-theme="dark"] .nav__hamburger:hover {
+  background: var(--honey-light);
+}
+[data-theme="dark"] .nav__links {
+  background: rgba(15, 12, 8, 0.98);
+  border-bottom-color: var(--border);
+}
+
+/* Section text */
+[data-theme="dark"] .section-title {
+  color: var(--text);
+}
+[data-theme="dark"] .section-label {
+  color: var(--honey-dark);
+}
+[data-theme="dark"] .section-sub {
+  color: var(--text-muted);
+}
+
+/* ════════════════════════════════════════
+   DARK MODE — SEMANTIC TOKEN FIXES
+   Fixes hardcoded --bee-black/--cream/--white usage
+   ════════════════════════════════════════ */
+
+/* Override palette tokens in dark mode */
+[data-theme="dark"] {
+  --bee-black: #f5ecd5;
+  --cream: #0f0c08;
+  --white: #1e180f;
+}
+
+/* Nav links & text */
+[data-theme="dark"] .nav__links a {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .nav__links a:hover {
+  color: #f5ecd5;
+}
+
+/* Section titles & labels */
+[data-theme="dark"] .section-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .section-sub {
+  color: #9a8e7f;
+}
+
+/* Feature cards */
+[data-theme="dark"] .feature-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .feature-card__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .feature-card__desc {
+  color: #9a8e7f;
+}
+
+/* Category cards */
+[data-theme="dark"] .cat-card {
+  background: #1e180f;
+}
+[data-theme="dark"] .cat-card__name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .cat-card__count {
+  color: #9a8e7f;
+}
+
+/* Product cards */
+[data-theme="dark"] .product-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .product-card__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .product-card__cat {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .product-card__info {
+  background: #1e180f;
+}
+[data-theme="dark"] .product-card__stars span {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .product-card__wishlist {
+  background: #2e2618;
+  color: #f5ecd5;
+}
+
+/* Testimonials */
+[data-theme="dark"] .testimonials {
+  background: #161209;
+}
+[data-theme="dark"] .testimonial-card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .testimonial-card__text {
+  color: #d4c4a8;
+}
+[data-theme="dark"] .author-name {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .author-role {
+  color: #9a8e7f;
+}
+
+/* Newsletter */
+[data-theme="dark"] .newsletter {
+  background: #161209;
+}
+[data-theme="dark"] .newsletter__sub {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .newsletter__form {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .newsletter__input {
+  color: #f5ecd5;
+  background: transparent;
+}
+[data-theme="dark"] .newsletter__input::placeholder {
+  color: #9a8e7f;
+}
+
+/* Promo banner */
+[data-theme="dark"] .promo-banner {
+  background: #0a0805;
+}
+[data-theme="dark"] .promo-banner__title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .promo-banner__sub {
+  color: rgba(245, 236, 213, 0.55);
+}
+
+/* Categories section bg */
+[data-theme="dark"] .categories {
+  background: #161209;
+}
+
+/* Stats */
+[data-theme="dark"] .stats {
+  background: #0a0805;
+}
+[data-theme="dark"] .stats__label {
+  color: rgba(245, 236, 213, 0.5);
+}
+[data-theme="dark"] .stats__item {
+  border-right-color: rgba(245, 236, 213, 0.08);
+}
+
+/* Showcase cards */
+[data-theme="dark"] .showcase__card {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.12);
+}
+[data-theme="dark"] .showcase__card-label {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .showcase__badge {
+  background: #0a0805;
+}
+
+/* Footer */
+[data-theme="dark"] .footer {
+  background: #0a0805;
+}
+[data-theme="dark"] .footer__brand p {
+  color: rgba(245, 236, 213, 0.45);
+}
+[data-theme="dark"] .footer__col h4 {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .footer__link {
+  color: rgba(245, 236, 213, 0.45);
+}
+[data-theme="dark"] .footer__link:hover {
+  color: #f5a623;
+}
+[data-theme="dark"] .footer__bottom {
+  border-top-color: rgba(245, 236, 213, 0.06);
+  color: rgba(245, 236, 213, 0.45);
+}
+[data-theme="dark"] .social-link {
+  background: rgba(245, 236, 213, 0.06);
+  color: rgba(245, 236, 213, 0.5);
+}
+
+/* Nav hamburger & mobile menu */
+[data-theme="dark"] .nav__hamburger {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .nav__links {
+  background: rgba(10, 8, 5, 0.98);
+}
+[data-theme="dark"] .nav__links a {
+  color: #9a8e7f;
+}
+
+/* Hero section bg */
+[data-theme="dark"] .hero {
+  background: #0f0c08;
+}
+
+/* Btn secondary */
+[data-theme="dark"] .btn-secondary {
+  color: #f5ecd5;
+  border-color: rgba(245, 236, 213, 0.2);
+}
+[data-theme="dark"] .btn-secondary:hover {
+  border-color: var(--honey);
+  background: rgba(245, 166, 35, 0.12);
+}
+
+/* Tags on product cards */
+[data-theme="dark"] .tag--new {
+  background: #f5ecd5;
+  color: #1a1208;
 }
