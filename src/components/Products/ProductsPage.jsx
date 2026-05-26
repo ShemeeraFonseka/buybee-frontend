@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCurrency } from "../Currency/CurrencyContext";
 import CurrencySwitcher from "../Currency/CurrencySwitcher";
-import "./ProductsPage.css";
 import ThemeToggle from "../Theme/ThemeToggle";
+import "./ProductsPage.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 const PRODUCTS_API = `${API_BASE}/api/products`;
@@ -14,7 +14,153 @@ const imgSrc = (url) =>
 const starStr = (n) =>
   "★".repeat(Math.round(n)) + "☆".repeat(5 - Math.round(n));
 
-/* ─── CART CONTEXT (local state lifted to page) ─── */
+/* ─── LOGO ─── */
+function Logo({ dark = false }) {
+  return (
+    <a href="/" className="nav__logo" style={dark ? { color: "#F5ECD5" } : {}}>
+      <div className="nav__logo-icon">🐝</div>BuyBee
+    </a>
+  );
+}
+
+/* ─── NAVBAR ─── */
+function Navbar({ cartCount, onCartOpen }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <nav className="nav">
+      <Logo />
+      <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
+        <li>
+          <a href="/" onClick={() => setMenuOpen(false)}>
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/about" onClick={() => setMenuOpen(false)}>
+            About Us
+          </a>
+        </li>
+        <li>
+          <a href="/products" onClick={() => setMenuOpen(false)}>
+            Products
+          </a>
+        </li>
+        <li>
+          <a href="/contact" onClick={() => setMenuOpen(false)}>
+            Contact
+          </a>
+        </li>
+        <li>
+          <CurrencySwitcher />
+        </li>
+        <li>
+          <ThemeToggle />
+        </li>
+        <li>
+          <button
+            className="pp-nav__cart-btn"
+            onClick={onCartOpen}
+            aria-label="Open cart"
+          >
+            🛒
+            {cartCount > 0 && (
+              <span className="pp-nav__cart-count">{cartCount}</span>
+            )}
+          </button>
+        </li>
+      </ul>
+      <div className="pp-nav__mobile-actions">
+        <ThemeToggle />
+        <button
+          className="pp-nav__cart-btn"
+          onClick={onCartOpen}
+          aria-label="Open cart"
+        >
+          🛒
+          {cartCount > 0 && (
+            <span className="pp-nav__cart-count">{cartCount}</span>
+          )}
+        </button>
+        <button
+          className="nav__hamburger"
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-label="Menu"
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+/* ─── FOOTER ─── */
+function Footer() {
+  const cols = [
+    {
+      heading: "Shop",
+      links: [
+        { label: "New Arrivals", href: "/products" },
+        { label: "Best Sellers", href: "/products" },
+        { label: "All Products", href: "/products" },
+      ],
+    },
+    {
+      heading: "Company",
+      links: [
+        { label: "About Us", href: "/about" },
+        { label: "Contact Us", href: "/contact" },
+      ],
+    },
+    {
+      heading: "Help",
+      links: [
+        { label: "Help Center", href: "/contact" },
+        { label: "Privacy Policy", href: "/contact" },
+        { label: "Terms of Use", href: "/contact" },
+      ],
+    },
+  ];
+
+  return (
+    <footer className="pp-full-footer">
+      <div className="pp-full-footer__top">
+        <div className="pp-full-footer__brand">
+          <Logo dark />
+          <p>
+            Your trusted marketplace for everything — from everyday essentials
+            to luxury finds, delivered fast with love.
+          </p>
+        </div>
+        {cols.map((col) => (
+          <div key={col.heading} className="pp-full-footer__col">
+            <h4>{col.heading}</h4>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="pp-full-footer__bottom">
+        <span>
+          © 2026 BuyBee. All rights reserved. Built with ❤️ by{" "}
+          <a
+            href="https://flegoinnovation.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Flego Innovation
+          </a>
+          .
+        </span>
+        <span>🐝 Shop smarter. Live better.</span>
+      </div>
+    </footer>
+  );
+}
 
 /* ─── CART DRAWER ─── */
 function CartDrawer({ cart, onClose, onRemove, onQtyChange, onCheckout }) {
@@ -30,7 +176,6 @@ function CartDrawer({ cart, onClose, onRemove, onQtyChange, onCheckout }) {
             ✕
           </button>
         </div>
-
         {cart.length === 0 ? (
           <div className="pp-cart__empty">
             <div className="pp-cart__empty-icon">🛍️</div>
@@ -145,7 +290,6 @@ function ProductCard({ product, onAddToCart }) {
           {wished ? "❤️" : "🤍"}
         </button>
       </div>
-
       <div className="pp-product-card__info">
         <div className="pp-product-card__cat">{product.category}</div>
         <div className="pp-product-card__title">{product.title}</div>
@@ -166,8 +310,8 @@ function ProductCard({ product, onAddToCart }) {
           <button
             className={`pp-add-btn ${added ? "pp-add-btn--added" : ""} ${outOfStock ? "pp-add-btn--oos" : ""}`}
             onClick={handleAdd}
-            aria-label={outOfStock ? "Out of stock" : "Add to cart"}
             disabled={outOfStock}
+            aria-label={outOfStock ? "Out of stock" : "Add to cart"}
           >
             {outOfStock ? "✕" : added ? "✓" : "+"}
           </button>
@@ -177,7 +321,7 @@ function ProductCard({ product, onAddToCart }) {
   );
 }
 
-/* ─── FILTER SIDEBAR ─── */
+/* ─── SIDEBAR ─── */
 function Sidebar({ categories, filters, onChange }) {
   const tags = [
     { value: "", label: "All" },
@@ -185,7 +329,6 @@ function Sidebar({ categories, filters, onChange }) {
     { value: "hot", label: "🔥 Hot" },
     { value: "sale", label: "🏷️ Sale" },
   ];
-
   const sorts = [
     { value: "newest", label: "Newest" },
     { value: "price_asc", label: "Price: Low → High" },
@@ -207,7 +350,6 @@ function Sidebar({ categories, filters, onChange }) {
           </button>
         ))}
       </div>
-
       <div className="pp-sidebar__section">
         <div className="pp-sidebar__label">Tag</div>
         {tags.map((t) => (
@@ -220,7 +362,6 @@ function Sidebar({ categories, filters, onChange }) {
           </button>
         ))}
       </div>
-
       <div className="pp-sidebar__section">
         <div className="pp-sidebar__label">Sort by</div>
         {sorts.map((s) => (
@@ -250,7 +391,6 @@ function Pagination({ page, total, limit, onChange }) {
       >
         ← Prev
       </button>
-
       {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
         <button
           key={p}
@@ -260,7 +400,6 @@ function Pagination({ page, total, limit, onChange }) {
           {p}
         </button>
       ))}
-
       <button
         className="pp-pagination__btn"
         disabled={page === pages}
@@ -282,7 +421,6 @@ export default function ProductsPage() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const [filters, setFilters] = useState({
     search: "",
     category: "All",
@@ -292,7 +430,6 @@ export default function ProductsPage() {
     limit: 12,
   });
 
-  const searchRef = useRef(null);
   const debounceRef = useRef(null);
 
   const fetchProducts = useCallback(async (f) => {
@@ -305,7 +442,6 @@ export default function ProductsPage() {
       params.set("sort", f.sort);
       params.set("page", f.page);
       params.set("limit", f.limit);
-
       const res = await fetch(`${PRODUCTS_API}?${params}`);
       const data = await res.json();
       setProducts(data.items || []);
@@ -322,15 +458,14 @@ export default function ProductsPage() {
     fetchProducts(filters);
   }, [filters, fetchProducts]);
 
-  /* Debounced search */
   const handleSearch = (val) => {
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      setFilters((f) => ({ ...f, search: val, page: 1 }));
-    }, 400);
+    debounceRef.current = setTimeout(
+      () => setFilters((f) => ({ ...f, search: val, page: 1 })),
+      400,
+    );
   };
 
-  /* Cart actions */
   const addToCart = (product) => {
     setCart((prev) => {
       const existing = prev.find((i) => i._id === product._id);
@@ -344,14 +479,11 @@ export default function ProductsPage() {
 
   const removeFromCart = (id) =>
     setCart((prev) => prev.filter((i) => i._id !== id));
-
   const changeQty = (id, qty) => {
     if (qty < 1) return removeFromCart(id);
     setCart((prev) => prev.map((i) => (i._id === id ? { ...i, qty } : i)));
   };
-
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
-
   const handleCheckout = () => {
     setCartOpen(false);
     navigate("/checkout", { state: { cart } });
@@ -359,42 +491,10 @@ export default function ProductsPage() {
 
   return (
     <div className="pp-root">
-      {/* ── TOP NAV ── */}
-      <nav className="pp-nav">
-        <a href="/" className="pp-nav__logo">
-          <div className="pp-nav__logo-icon">🐝</div>
-          BuyBee
-        </a>
-
-        <div className="pp-nav__search">
-          <span className="pp-nav__search-icon">🔍</span>
-          <input
-            ref={searchRef}
-            type="text"
-            placeholder="Search products…"
-            className="pp-nav__search-input"
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-        </div>
-
-        <div className="pp-nav__actions">
-          <CurrencySwitcher />
-          <ThemeToggle />
-          <button
-            className="pp-nav__cart-btn"
-            onClick={() => setCartOpen(true)}
-            aria-label="Open cart"
-          >
-            🛒
-            {cartCount > 0 && (
-              <span className="pp-nav__cart-count">{cartCount}</span>
-            )}
-          </button>
-        </div>
-      </nav>
+      <Navbar cartCount={cartCount} onCartOpen={() => setCartOpen(true)} />
 
       <div className="pp-body">
-        {/* ── SIDEBAR TOGGLE (mobile) ── */}
+        {/* Mobile filter toggle */}
         <button
           className="pp-filter-toggle"
           onClick={() => setSidebarOpen((o) => !o)}
@@ -402,7 +502,7 @@ export default function ProductsPage() {
           {sidebarOpen ? "✕ Close" : "⚙️ Filters"}
         </button>
 
-        {/* ── SIDEBAR ── */}
+        {/* Sidebar */}
         <div
           className={`pp-sidebar-wrap ${sidebarOpen ? "pp-sidebar-wrap--open" : ""}`}
         >
@@ -427,9 +527,18 @@ export default function ProductsPage() {
           />
         </div>
 
-        {/* ── MAIN ── */}
+        {/* Main */}
         <main className="pp-main">
-          {/* Results bar */}
+          {/* Search bar (visible on mobile) */}
+          <div className="pp-mobile-search">
+            <span>🔍</span>
+            <input
+              type="text"
+              placeholder="Search products…"
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+          </div>
+
           <div className="pp-results-bar">
             <span className="pp-results-bar__count">
               {loading
@@ -450,7 +559,6 @@ export default function ProductsPage() {
             </select>
           </div>
 
-          {/* Grid */}
           {loading ? (
             <div className="pp-loading">
               <div className="pp-loading__spinner" />
@@ -494,7 +602,8 @@ export default function ProductsPage() {
         </main>
       </div>
 
-      {/* ── CART DRAWER ── */}
+      <Footer />
+
       {cartOpen && (
         <CartDrawer
           cart={cart}

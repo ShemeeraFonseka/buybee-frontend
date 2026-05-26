@@ -9,7 +9,6 @@ import {
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 const CurrencyContext = createContext(null);
 
-/* Fallback if API is down */
 const FALLBACK = [
   { code: "USD", symbol: "$", name: "US Dollar", rateToUSD: 1 },
   { code: "LKR", symbol: "Rs", name: "Sri Lankan Rupee", rateToUSD: 320 },
@@ -23,27 +22,28 @@ export function CurrencyProvider({ children }) {
       JSON.parse(localStorage.getItem("bb_currency") || "null") || FALLBACK[0],
   );
 
-  /* Load currencies from server */
   useEffect(() => {
     fetch(`${API_BASE}/api/currencies`)
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data) && data.length) {
           setCurrencies(data);
-          // Refresh active currency with latest rate
           const stored = JSON.parse(
             localStorage.getItem("bb_currency") || "null",
           );
           if (stored) {
             const updated = data.find((c) => c.code === stored.code);
             if (updated) setActiveCurrency(updated);
+          } else {
+            // refresh active with latest rate from server
+            const updated = data.find((c) => c.code === activeCurrency.code);
+            if (updated) setActiveCurrency(updated);
           }
         }
       })
-      .catch(() => {}); // use fallback silently
-  }, []);
+      .catch(() => {});
+  }, []); // eslint-disable-line
 
-  /* Switch currency */
   const switchCurrency = useCallback(
     (code) => {
       const found = currencies.find((c) => c.code === code);
@@ -55,30 +55,23 @@ export function CurrencyProvider({ children }) {
     [currencies],
   );
 
-  /* Convert a USD price to active currency */
   const convert = useCallback(
     (usdPrice) => {
-      if (!usdPrice && usdPrice !== 0) return "";
-      const converted = Number(usdPrice) * activeCurrency.rateToUSD;
-      return converted;
+      if (!usdPrice && usdPrice !== 0) return 0;
+      return Number(usdPrice) * activeCurrency.rateToUSD;
     },
     [activeCurrency],
   );
 
-  /* Format a USD price in the active currency */
   const format = useCallback(
     (usdPrice) => {
       if (!usdPrice && usdPrice !== 0) return "";
       const converted = Number(usdPrice) * activeCurrency.rateToUSD;
-
-      // KRW has no decimal places, LKR uses 2
       const decimals = activeCurrency.code === "KRW" ? 0 : 2;
-      const formatted = converted.toLocaleString(undefined, {
+      return `${activeCurrency.symbol}${converted.toLocaleString(undefined, {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
-      });
-
-      return `${activeCurrency.symbol}${formatted}`;
+      })}`;
     },
     [activeCurrency],
   );
@@ -88,6 +81,8 @@ export function CurrencyProvider({ children }) {
       value={{
         currencies,
         activeCurrency,
+        selectedCurrency: activeCurrency, // alias — POSApp, AdminProducts use this
+        selected: activeCurrency.code, // alias — some components use this
         switchCurrency,
         convert,
         format,

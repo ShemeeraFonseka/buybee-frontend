@@ -7,11 +7,7 @@ const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
 function Logo({ dark = false }) {
   return (
-    <a
-      href="/"
-      className="ab-logo"
-      style={dark ? { color: "var(--white)" } : {}}
-    >
+    <a href="/" className="ab-logo" style={dark ? { color: "#F5ECD5" } : {}}>
       <div className="ab-logo__icon">🐝</div>BuyBee
     </a>
   );
@@ -29,12 +25,17 @@ function Navbar() {
           </a>
         </li>
         <li>
-          <a href="about" onClick={() => setMenuOpen(false)}>
+          <a href="/about" onClick={() => setMenuOpen(false)}>
             About Us
           </a>
         </li>
         <li>
-          <a href="contact" onClick={() => setMenuOpen(false)}>
+          <a href="/products" onClick={() => setMenuOpen(false)}>
+            Products
+          </a>
+        </li>
+        <li>
+          <a href="/contact" onClick={() => setMenuOpen(false)}>
             Contact
           </a>
         </li>
@@ -62,6 +63,74 @@ function Navbar() {
         {menuOpen ? "✕" : "☰"}
       </button>
     </nav>
+  );
+}
+
+function Footer() {
+  const cols = [
+    {
+      heading: "Shop",
+      links: [
+        { label: "New Arrivals", href: "/products" },
+        { label: "Best Sellers", href: "/products" },
+        { label: "All Products", href: "/products" },
+      ],
+    },
+    {
+      heading: "Company",
+      links: [
+        { label: "About Us", href: "/about" },
+        { label: "Contact Us", href: "/contact" },
+      ],
+    },
+    {
+      heading: "Help",
+      links: [
+        { label: "Help Center", href: "/contact" },
+        { label: "Privacy Policy", href: "/contact" },
+        { label: "Terms of Use", href: "/contact" },
+      ],
+    },
+  ];
+
+  return (
+    <footer className="ab-full-footer">
+      <div className="ab-full-footer__top">
+        <div className="ab-full-footer__brand">
+          <Logo dark />
+          <p>
+            Your trusted marketplace for everything — from everyday essentials
+            to luxury finds, delivered fast with love.
+          </p>
+        </div>
+        {cols.map((col) => (
+          <div key={col.heading} className="ab-full-footer__col">
+            <h4>{col.heading}</h4>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="ab-full-footer__bottom">
+        <span>
+          © 2026 BuyBee. All rights reserved. Built with ❤️ by{" "}
+          <a
+            href="https://flegoinnovation.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Flego Innovation
+          </a>
+          .
+        </span>
+        <span>🐝 Shop smarter. Live better.</span>
+      </div>
+    </footer>
   );
 }
 
@@ -308,21 +377,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <footer className="ab-footer">
-        <Logo dark />
-        <p>
-          © 2026 BuyBee. Built with ❤️ by{" "}
-          <a
-            href="https://flegoinnovation.com"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Flego Innovation
-          </a>
-          .
-        </p>
-        <span>🐝 Shop smarter. Live better.</span>
-      </footer>
+      <Footer />
     </div>
   );
 }

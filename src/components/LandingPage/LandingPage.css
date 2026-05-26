@@ -1912,3 +1912,15 @@ body {
   background: #f5ecd5;
   color: #1a1208;
 }
+
+/* Showcase badge dark mode fix */
+[data-theme="dark"] .showcase__badge {
+  background: #0a0805;
+  color: #f5ecd5;
+}
+[data-theme="dark"] .showcase__badge-title {
+  color: #f5ecd5;
+}
+[data-theme="dark"] .showcase__badge-sub {
+  color: rgba(245, 236, 213, 0.5);
+}

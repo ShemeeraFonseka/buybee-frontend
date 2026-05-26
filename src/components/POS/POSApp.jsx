@@ -4,10 +4,8 @@ import "./POSApp.css";
 import CurrencySwitcher from "../Currency/CurrencySwitcher";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
-
 const imgSrc = (url) =>
   !url ? null : url.startsWith("http") ? url : `${API_BASE}${url}`;
-
 const getToken = () => localStorage.getItem("bb_token");
 const authHeaders = () => ({
   "Content-Type": "application/json",
@@ -15,7 +13,78 @@ const authHeaders = () => ({
 });
 
 /* ════════════════════════════════════════
-   RECEIPT COMPONENT (printable)
+   HELD BILLS MODAL
+   ════════════════════════════════════════ */
+function HeldBillsModal({ heldBills, onResume, onDelete, onClose, fmt }) {
+  return (
+    <div className="pos-modal-overlay">
+      <div className="pos-modal pos-modal--held">
+        <div className="pos-modal__header">
+          <h2>📋 Held Bills ({heldBills.length})</h2>
+          <button
+            className="pos-btn pos-btn--ghost pos-btn--icon"
+            onClick={onClose}
+          >
+            ✕
+          </button>
+        </div>
+        <div className="pos-modal__body">
+          {heldBills.length === 0 ? (
+            <div className="pos-held-empty">
+              <div style={{ fontSize: "2rem" }}>📋</div>
+              <p>No held bills</p>
+            </div>
+          ) : (
+            <div className="pos-held-list">
+              {heldBills.map((bill) => (
+                <div key={bill.id} className="pos-held-item">
+                  <div className="pos-held-item__info">
+                    <div className="pos-held-item__name">
+                      {bill.label || `Bill #${bill.id}`}
+                    </div>
+                    <div className="pos-held-item__meta">
+                      {bill.items.reduce((s, i) => s + i.qty, 0)} items
+                      &nbsp;·&nbsp;
+                      {new Date(bill.heldAt).toLocaleTimeString()}
+                    </div>
+                    <div className="pos-held-item__products">
+                      {bill.items
+                        .slice(0, 3)
+                        .map((i) => i.title)
+                        .join(", ")}
+                      {bill.items.length > 3 &&
+                        ` +${bill.items.length - 3} more`}
+                    </div>
+                  </div>
+                  <div className="pos-held-item__total">
+                    {fmt(bill.items.reduce((s, i) => s + i.price * i.qty, 0))}
+                  </div>
+                  <div className="pos-held-item__actions">
+                    <button
+                      className="pos-btn pos-btn--primary pos-btn--sm"
+                      onClick={() => onResume(bill.id)}
+                    >
+                      ↩ Resume
+                    </button>
+                    <button
+                      className="pos-btn pos-btn--danger-ghost pos-btn--sm"
+                      onClick={() => onDelete(bill.id)}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════
+   RECEIPT
    ════════════════════════════════════════ */
 function Receipt({ sale, session, onClose, fmt }) {
   const printRef = useRef(null);
@@ -28,22 +97,16 @@ function Receipt({ sale, session, onClose, fmt }) {
     document.body.appendChild(iframe);
     const doc = iframe.contentDocument || iframe.contentWindow.document;
     doc.open();
-    doc.write(`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>BuyBee Receipt - ${sale.order?.orderNumber}</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Courier New',monospace; font-size:12px; width:300px; padding:12px; color:#000; }
-  .r-header { text-align:center; border-bottom:1px dashed #000; padding-bottom:8px; margin-bottom:8px; }
-  .r-logo   { font-size:16px; font-weight:bold; margin-bottom:2px; }
-  .r-sub    { font-size:10px; color:#555; margin-bottom:1px; }
-  .r-row    { display:flex; justify-content:space-between; margin:3px 0; font-size:12px; }
-  .r-divider{ border-top:1px dashed #000; margin:6px 0; }
-  .r-total  { font-weight:bold; font-size:14px; margin:4px 0; }
-  .r-change { background:#f0f0f0; padding:5px 8px; text-align:center; margin:6px 0; border-radius:4px; font-weight:bold; font-size:13px; }
-  .r-footer { text-align:center; margin-top:10px; font-size:10px; color:#555; }
-  .r-item-name { max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  @media print { body { width:100%; } @page { margin:0; size:80mm auto; } }
-</style></head><body>${content}</body></html>`);
+    doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Receipt</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Courier New',monospace;font-size:12px;width:300px;padding:12px;color:#000;}
+.r-header{text-align:center;border-bottom:1px dashed #000;padding-bottom:8px;margin-bottom:8px;}
+.r-logo{font-size:16px;font-weight:bold;margin-bottom:2px;}.r-sub{font-size:10px;color:#555;margin-bottom:1px;}
+.r-row{display:flex;justify-content:space-between;margin:3px 0;font-size:12px;}
+.r-divider{border-top:1px dashed #000;margin:6px 0;}.r-total{font-weight:bold;font-size:14px;margin:4px 0;}
+.r-change{background:#f0f0f0;padding:5px 8px;text-align:center;margin:6px 0;border-radius:4px;font-weight:bold;font-size:13px;}
+.r-footer{text-align:center;margin-top:10px;font-size:10px;color:#555;}
+.r-item-name{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media print{body{width:100%;}@page{margin:0;size:80mm auto;}}</style></head><body>${content}</body></html>`);
     doc.close();
     iframe.contentWindow.focus();
     setTimeout(() => {
@@ -54,7 +117,6 @@ function Receipt({ sale, session, onClose, fmt }) {
 
   const o = sale.order;
   const now = new Date();
-
   return (
     <div className="pos-modal-overlay">
       <div className="pos-modal pos-modal--receipt">
@@ -193,36 +255,20 @@ function ShiftModal({
         <div className="pos-modal__body">
           {tab === "status" && session && (
             <div className="shift-status">
-              <div className="shift-status__row">
-                <span>Operator</span>
-                <strong>{session.operator}</strong>
-              </div>
-              <div className="shift-status__row">
-                <span>Terminal</span>
-                <strong>{session.terminal}</strong>
-              </div>
-              <div className="shift-status__row">
-                <span>Opened</span>
-                <strong>
-                  {new Date(session.openedAt).toLocaleTimeString()}
-                </strong>
-              </div>
-              <div className="shift-status__row">
-                <span>Sales</span>
-                <strong>{fmt(session.totalSales)}</strong>
-              </div>
-              <div className="shift-status__row">
-                <span>Orders</span>
-                <strong>{session.totalOrders}</strong>
-              </div>
-              <div className="shift-status__row">
-                <span>Cash</span>
-                <strong>{fmt(session.totalCash)}</strong>
-              </div>
-              <div className="shift-status__row">
-                <span>Card</span>
-                <strong>{fmt(session.totalCard)}</strong>
-              </div>
+              {[
+                ["Operator", session.operator],
+                ["Terminal", session.terminal],
+                ["Opened", new Date(session.openedAt).toLocaleTimeString()],
+                ["Sales", fmt(session.totalSales)],
+                ["Orders", session.totalOrders],
+                ["Cash", fmt(session.totalCash)],
+                ["Card", fmt(session.totalCard)],
+              ].map(([k, v]) => (
+                <div key={k} className="shift-status__row">
+                  <span>{k}</span>
+                  <strong>{v}</strong>
+                </div>
+              ))}
               <div className="shift-status__row shift-status__row--highlight">
                 <span>Expected Cash</span>
                 <strong>{fmt(session.expectedCash)}</strong>
@@ -404,8 +450,13 @@ function CustomerDisplay({ cart, total, lastSale, fmt }) {
 
 /* ════════════════════════════════════════
    CHECKOUT MODAL
+   — All user input/display in local currency (e.g. LKR)
+   — fmtDisp() formats display-currency numbers directly (no USD conversion)
+   — Only converts back to USD when sending to backend
    ════════════════════════════════════════ */
-function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
+function CheckoutModal({ cart, subtotalUSD, onSale, onClose, saving }) {
+  const { selectedCurrency, format, currencies } = useCurrency();
+
   const [payMethod, setPayMethod] = useState("cash");
   const [discount, setDiscount] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
@@ -414,16 +465,61 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
   const [custPhone, setCustPhone] = useState("");
   const [note, setNote] = useState("");
 
-  const discountNum = Number(discount) || 0;
-  const total = Math.max(0, subtotal - discountNum);
-  const change =
-    payMethod === "cash" ? Math.max(0, (Number(amountPaid) || 0) - total) : 0;
+  /* Wait until currencies have loaded — without this rate = 1 (USD fallback) */
+  if (!currencies || currencies.length === 0) {
+    return (
+      <div className="pos-modal-overlay">
+        <div
+          className="pos-modal"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 200,
+          }}
+        >
+          <div className="ap-loading__spinner" />
+        </div>
+      </div>
+    );
+  }
 
+  const rate = selectedCurrency?.rateToUSD || 1;
+  const symbol = selectedCurrency?.symbol || "$";
+  const fmt = (n) => format(Number(n));
+
+  // All amounts in display currency (e.g. LKR)
+  const subtotalDisp = subtotalUSD * rate;
+  const discountDisp = Math.max(0, Number(discount) || 0);
+  const totalDisp = Math.max(0, subtotalDisp - discountDisp);
+  const amountPaidDisp = Number(amountPaid) || 0;
+  const changeDisp =
+    payMethod === "cash" ? Math.max(0, amountPaidDisp - totalDisp) : 0;
+  const isShort =
+    payMethod === "cash" && !!amountPaid && amountPaidDisp < totalDisp;
+
+  // Format a number that is ALREADY in display currency — no conversion needed
+  const fmtDisp = (n) =>
+    `${symbol}${Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  // Smart quick-amount rounding based on display total
+  const mag =
+    totalDisp < 100
+      ? 10
+      : totalDisp < 1000
+        ? 50
+        : totalDisp < 10000
+          ? 100
+          : totalDisp < 100000
+            ? 500
+            : 1000;
   const quickAmounts = [
-    Math.ceil(total / 10) * 10,
-    Math.ceil(total / 50) * 50,
-    Math.ceil(total / 100) * 100,
-  ];
+    ...new Set([
+      Math.ceil(totalDisp / mag) * mag,
+      Math.ceil(totalDisp / (mag * 5)) * (mag * 5),
+      Math.ceil(totalDisp / (mag * 10)) * (mag * 10),
+    ]),
+  ].filter((a) => a > totalDisp);
 
   return (
     <div className="pos-modal-overlay">
@@ -439,6 +535,7 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
         </div>
         <div className="pos-modal__body pos-modal__body--checkout">
           <div className="checkout-left">
+            {/* Payment method */}
             <div className="pos-field">
               <label>Payment Method</label>
               <div className="pos-toggle-group">
@@ -462,56 +559,66 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
                 </button>
               </div>
             </div>
+
+            {/* Discount — typed in display currency */}
             <div className="pos-field">
-              <label>Discount</label>
+              <label>Discount ({symbol})</label>
               <input
                 type="number"
+                min="0"
                 value={discount}
                 onChange={(e) => setDiscount(e.target.value)}
-                placeholder="0.00"
+                placeholder="0"
                 className="pos-input"
               />
             </div>
+
+            {/* Amount paid — typed in display currency */}
             {payMethod === "cash" && (
               <div className="pos-field">
-                <label>Amount Paid</label>
+                <label>Amount Paid ({symbol})</label>
                 <input
                   type="number"
+                  min="0"
                   value={amountPaid}
                   onChange={(e) => setAmountPaid(e.target.value)}
-                  placeholder="0.00"
+                  placeholder={totalDisp.toFixed(2)}
                   className="pos-input pos-input--large"
                 />
+
+                {/* Quick amounts — display currency, no conversion */}
                 <div className="quick-amounts">
-                  {quickAmounts
-                    .filter((v, i, a) => a.indexOf(v) === i)
-                    .map((a) => (
-                      <button
-                        key={a}
-                        className="quick-amount"
-                        onClick={() => setAmountPaid(String(a))}
-                      >
-                        {fmt(a)}
-                      </button>
-                    ))}
+                  {quickAmounts.map((a) => (
+                    <button
+                      key={a}
+                      className="quick-amount"
+                      onClick={() => setAmountPaid(String(a))}
+                    >
+                      {fmtDisp(a)}
+                    </button>
+                  ))}
                   <button
                     className="quick-amount quick-amount--exact"
-                    onClick={() => setAmountPaid(String(total))}
+                    onClick={() => setAmountPaid(totalDisp.toFixed(2))}
                   >
                     Exact
                   </button>
                 </div>
+
+                {/* Change / short — pure display currency math */}
                 {amountPaid && (
                   <div
-                    className={`change-display ${change >= 0 ? "change-display--ok" : "change-display--short"}`}
+                    className={`change-display ${isShort ? "change-display--short" : "change-display--ok"}`}
                   >
-                    {change >= 0
-                      ? `Change: ${fmt(change)}`
-                      : `Short: ${fmt(Math.abs(change))}`}
+                    {isShort
+                      ? `Short: ${fmtDisp(totalDisp - amountPaidDisp)}`
+                      : `Change: ${fmtDisp(changeDisp)}`}
                   </div>
                 )}
               </div>
             )}
+
+            {/* Customer */}
             <div className="pos-field">
               <label>Customer (optional)</label>
               <input
@@ -538,6 +645,8 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
                 style={{ marginTop: 6 }}
               />
             </div>
+
+            {/* Note */}
             <div className="pos-field">
               <label>Note</label>
               <input
@@ -550,6 +659,7 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
             </div>
           </div>
 
+          {/* Order summary */}
           <div className="checkout-right">
             <div className="checkout-summary">
               <div className="checkout-summary__title">Order Summary</div>
@@ -558,46 +668,43 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
                   <span>
                     {item.title} ×{item.qty}
                   </span>
-                  <span>{fmt(item.price * item.qty)}</span>
+                  <span>{fmtDisp(item.price * item.qty * rate)}</span>
                 </div>
               ))}
               <div className="checkout-summary__divider" />
               <div className="checkout-summary__row">
                 <span>Subtotal</span>
-                <span>{fmt(subtotal)}</span>
+                <span>{fmtDisp(subtotalDisp)}</span>
               </div>
-              {discountNum > 0 && (
+              {discountDisp > 0 && (
                 <div className="checkout-summary__row checkout-summary__row--discount">
                   <span>Discount</span>
-                  <span>-{fmt(discountNum)}</span>
+                  <span>-{fmtDisp(discountDisp)}</span>
                 </div>
               )}
               <div className="checkout-summary__total">
                 <span>TOTAL</span>
-                <span>{fmt(total)}</span>
+                <span>{fmtDisp(totalDisp)}</span>
               </div>
             </div>
+
             <button
               className="pos-btn pos-btn--sale pos-btn--full"
+              disabled={saving || isShort}
               onClick={() =>
                 onSale({
                   payMethod,
-                  discount: discountNum,
-                  amountPaid: Number(amountPaid),
+                  discountUSD: discountDisp / rate, // → USD for backend
+                  amountPaidUSD: amountPaidDisp / rate, // → USD for backend
+                  changeUSD: changeDisp / rate, // → USD for backend
                   custName,
                   custEmail,
                   custPhone,
                   note,
                 })
               }
-              disabled={
-                saving ||
-                (payMethod === "cash" &&
-                  amountPaid &&
-                  Number(amountPaid) < total)
-              }
             >
-              {saving ? "⏳ Processing…" : `✓ Charge ${fmt(total)}`}
+              {saving ? "⏳ Processing…" : `✓ Charge ${fmtDisp(totalDisp)}`}
             </button>
           </div>
         </div>
@@ -610,12 +717,19 @@ function CheckoutModal({ cart, subtotal, onSale, onClose, saving, fmt }) {
    MAIN POS APP
    ════════════════════════════════════════ */
 export default function POSApp() {
-  const { format } = useCurrency(); // ← live currency format
-  const fmt = (n) => format(Number(n)); // wrapper used throughout
+  const { format, selectedCurrency } = useCurrency();
+  const fmt = (n) => format(Number(n)); // USD → display currency
 
   const [session, setSession] = useState(null);
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
+  const [heldBills, setHeldBills] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("bb_pos_held") || "[]");
+    } catch {
+      return [];
+    }
+  });
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [categories, setCategories] = useState([]);
@@ -625,6 +739,10 @@ export default function POSApp() {
   const [toast, setToast] = useState("");
   const [modal, setModal] = useState(null);
   const searchRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem("bb_pos_held", JSON.stringify(heldBills));
+  }, [heldBills]);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -636,8 +754,7 @@ export default function POSApp() {
       const res = await fetch(`${API_BASE}/api/pos/session/current`, {
         headers: authHeaders(),
       });
-      const data = await res.json();
-      setSession(data);
+      setSession(await res.json());
     } catch {}
   }, []);
 
@@ -662,13 +779,12 @@ export default function POSApp() {
     } catch {}
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadSession();
     loadProducts();
     loadSales();
     searchRef.current?.focus();
-  }, []);
+  }, []); // eslint-disable-line
 
   const filtered = products.filter((p) => {
     const matchCat = category === "All" || p.category === category;
@@ -699,7 +815,49 @@ export default function POSApp() {
   };
 
   const clearCart = () => setCart([]);
-  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0); // always USD
+
+  /* ── Hold bill ── */
+  const holdBill = () => {
+    if (!cart.length) {
+      showToast("Cart is empty");
+      return;
+    }
+    const label = `Table ${heldBills.length + 1}`;
+    setHeldBills((prev) => [
+      ...prev,
+      { id: Date.now(), label, items: cart, heldAt: new Date().toISOString() },
+    ]);
+    clearCart();
+    showToast(`Bill held as "${label}"`);
+  };
+
+  /* ── Resume bill ── */
+  const resumeBill = (id) => {
+    const bill = heldBills.find((b) => b.id === id);
+    if (!bill) return;
+    if (cart.length > 0) {
+      setHeldBills((prev) => [
+        ...prev.filter((b) => b.id !== id),
+        {
+          id: Date.now(),
+          label: `Paused ${new Date().toLocaleTimeString()}`,
+          items: cart,
+          heldAt: new Date().toISOString(),
+        },
+      ]);
+    } else {
+      setHeldBills((prev) => prev.filter((b) => b.id !== id));
+    }
+    setCart(bill.items);
+    setModal(null);
+    showToast(`Resumed "${bill.label}"`);
+  };
+
+  const deleteBill = (id) => {
+    setHeldBills((prev) => prev.filter((b) => b.id !== id));
+    showToast("Bill removed");
+  };
 
   const handleOpenShift = async (openingCash) => {
     const res = await fetch(`${API_BASE}/api/pos/session/open`, {
@@ -744,8 +902,9 @@ export default function POSApp() {
 
   const handleSale = async ({
     payMethod,
-    discount,
-    amountPaid,
+    discountUSD,
+    amountPaidUSD,
+    changeUSD,
     custName,
     custEmail,
     custPhone,
@@ -760,8 +919,8 @@ export default function POSApp() {
       const body = {
         items: cart.map((i) => ({ productId: i._id, qty: i.qty })),
         paymentMethod: payMethod,
-        amountPaid,
-        discount,
+        amountPaid: amountPaidUSD,
+        discount: discountUSD,
         customerName: custName,
         customerEmail: custEmail,
         customerPhone: custPhone,
@@ -774,7 +933,8 @@ export default function POSApp() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-      setLastSale(data);
+      // Attach the USD change so receipt fmt() can convert it correctly
+      setLastSale({ ...data, change: changeUSD });
       clearCart();
       setModal("receipt");
       loadSession();
@@ -798,11 +958,19 @@ export default function POSApp() {
         e.preventDefault();
         if (cart.length) setModal("checkout");
       }
+      if (e.key === "F6") {
+        e.preventDefault();
+        holdBill();
+      }
+      if (e.key === "F7") {
+        e.preventDefault();
+        setModal("held");
+      }
       if (e.key === "Escape") setModal(null);
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [cart]);
+  }, [cart, heldBills]); // eslint-disable-line
 
   return (
     <div className="pos-root">
@@ -825,7 +993,7 @@ export default function POSApp() {
             className="pos-btn pos-btn--ghost pos-btn--sm"
             onClick={() => setModal("display")}
           >
-            📺 Customer Display
+            📺 Display
           </button>
           <button
             className="pos-btn pos-btn--ghost pos-btn--sm"
@@ -834,12 +1002,13 @@ export default function POSApp() {
             💼 Shift
           </button>
           <a href="/admin" className="pos-btn pos-btn--ghost pos-btn--sm">
-            ⬅ Back to Admin
+            ⬅ Admin
           </a>
         </div>
       </div>
 
       <div className="pos-body">
+        {/* Products panel */}
         <div className="pos-products">
           <div className="pos-search">
             <span>🔍</span>
@@ -888,8 +1057,12 @@ export default function POSApp() {
                   >
                     {src ? <img src={src} alt={p.title} /> : "🛍️"}
                     {oos && <div className="pos-product__oos">OUT</div>}
-                    {p.stock !== undefined && p.stock > 0 && p.stock <= 5 && (
-                      <div className="pos-product__low">⚠️{p.stock}</div>
+                    {!oos && p.stock !== undefined && (
+                      <div
+                        className={`pos-product__stock ${p.stock <= 5 ? "pos-product__stock--low" : ""}`}
+                      >
+                        {p.stock <= 5 ? `⚠️ ${p.stock}` : p.stock} left
+                      </div>
                     )}
                   </div>
                   <div className="pos-product__title">{p.title}</div>
@@ -903,6 +1076,7 @@ export default function POSApp() {
           </div>
         </div>
 
+        {/* Cart panel */}
         <div className="pos-cart">
           <div className="pos-cart__header">
             <span>
@@ -910,23 +1084,52 @@ export default function POSApp() {
               {cart.length > 0 &&
                 `(${cart.reduce((s, i) => s + i.qty, 0)} items)`}
             </span>
-            {cart.length > 0 && (
-              <button
-                className="pos-btn pos-btn--ghost pos-btn--sm"
-                onClick={clearCart}
-              >
-                Clear
-              </button>
-            )}
+            <div className="pos-cart__header-actions">
+              {cart.length > 0 && (
+                <button
+                  className="pos-btn pos-btn--hold pos-btn--sm"
+                  onClick={holdBill}
+                  title="Hold bill (F6)"
+                >
+                  ⏸ Hold
+                </button>
+              )}
+              {heldBills.length > 0 && (
+                <button
+                  className="pos-btn pos-btn--held pos-btn--sm"
+                  onClick={() => setModal("held")}
+                  title="View held bills (F7)"
+                >
+                  📋 {heldBills.length} Held
+                </button>
+              )}
+              {cart.length > 0 && (
+                <button
+                  className="pos-btn pos-btn--ghost pos-btn--sm"
+                  onClick={clearCart}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
+
           <div className="pos-cart__items">
             {cart.length === 0 ? (
               <div className="pos-cart__empty">
                 <div>🛒</div>
                 <p>Cart is empty</p>
-                <p className="pos-cart__empty-hint">
-                  Click a product or search to add
-                </p>
+                <p className="pos-cart__empty-hint">Click a product to add</p>
+                {heldBills.length > 0 && (
+                  <button
+                    className="pos-btn pos-btn--held pos-btn--sm"
+                    style={{ marginTop: 12 }}
+                    onClick={() => setModal("held")}
+                  >
+                    📋 {heldBills.length} bill
+                    {heldBills.length !== 1 ? "s" : ""} on hold
+                  </button>
+                )}
               </div>
             ) : (
               cart.map((item) => (
@@ -935,6 +1138,13 @@ export default function POSApp() {
                     <div className="pos-cart__item-title">{item.title}</div>
                     <div className="pos-cart__item-price">
                       {fmt(item.price)} each
+                      {item.stock !== undefined && (
+                        <span
+                          className={`pos-cart__item-stock ${item.stock <= item.qty ? "pos-cart__item-stock--warn" : ""}`}
+                        >
+                          &nbsp;· {item.stock} in stock
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="pos-cart__item-controls">
@@ -965,6 +1175,7 @@ export default function POSApp() {
               ))
             )}
           </div>
+
           <div className="pos-cart__footer">
             <div className="pos-cart__subtotal">
               <span>Subtotal</span>
@@ -982,6 +1193,7 @@ export default function POSApp() {
                   : `Charge ${fmt(subtotal)} (F4)`}
             </button>
           </div>
+
           {recentSales.length > 0 && (
             <div className="pos-recent">
               <div className="pos-recent__title">Recent Sales</div>
@@ -999,6 +1211,16 @@ export default function POSApp() {
         </div>
       </div>
 
+      {/* Modals */}
+      {modal === "held" && (
+        <HeldBillsModal
+          heldBills={heldBills}
+          onResume={resumeBill}
+          onDelete={deleteBill}
+          onClose={() => setModal(null)}
+          fmt={fmt}
+        />
+      )}
       {modal === "shift" && (
         <ShiftModal
           session={session}
@@ -1012,11 +1234,10 @@ export default function POSApp() {
       {modal === "checkout" && cart.length > 0 && (
         <CheckoutModal
           cart={cart}
-          subtotal={subtotal}
+          subtotalUSD={subtotal}
           onSale={handleSale}
           onClose={() => setModal(null)}
           saving={saving}
-          fmt={fmt}
         />
       )}
       {modal === "receipt" && lastSale && (

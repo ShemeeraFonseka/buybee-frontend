@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./AdminProducts.css";
+import CurrencySwitcher from "../Currency/CurrencySwitcher";
+import { useCurrency } from "../Currency/CurrencyContext";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 const PRODUCTS_API = `${API_BASE}/api/products`;
@@ -38,10 +40,12 @@ function ImageUploader({ value, onChange }) {
     setError("");
     setUploading(true);
     try {
+      const token = localStorage.getItem("bb_token");
       const form = new FormData();
       form.append("image", file);
       const res = await fetch(`${API_BASE}/api/upload`, {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,
       });
       if (!res.ok) throw new Error("Upload failed");
@@ -134,7 +138,7 @@ function Field({ label, value, onChange, type = "text", rows, half }) {
   );
 }
 
-/* ─── PRODUCT FORM (add / edit) ─── */
+/* ─── PRODUCT FORM ─── */
 function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
   const [form, setForm] = useState(initial);
   const set = (key) => (val) => setForm((f) => ({ ...f, [key]: val }));
@@ -150,7 +154,6 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
   return (
     <div className="ap-form">
       <ImageUploader value={form.image} onChange={set("image")} />
-
       <div className="ap-form__grid">
         <Field
           label="Title *"
@@ -165,14 +168,14 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
           half
         />
         <Field
-          label="Price ($) *"
+          label="Price (USD) *"
           value={form.price}
           onChange={set("price")}
           type="number"
           half
         />
         <Field
-          label="Old Price ($)"
+          label="Old Price (USD)"
           value={form.oldPrice}
           onChange={set("oldPrice")}
           type="number"
@@ -272,11 +275,13 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
 
 /* ─── ROOT ─── */
 export default function AdminProducts() {
+  const { format, selected } = useCurrency(); // ← get format + selected currency from context
+
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [view, setView] = useState("list"); // 'list' | 'add' | 'edit'
+  const [view, setView] = useState("list");
   const [editing, setEditing] = useState(null);
   const [confirm, setConfirm] = useState(null);
   const [toast, setToast] = useState({ msg: "", type: "success" });
@@ -315,16 +320,21 @@ export default function AdminProducts() {
       const body = {
         ...form,
         price: parseFloat(form.price) || 0,
-        oldPrice: parseFloat(form.oldPrice) || null,
+        oldPrice: form.oldPrice ? parseFloat(form.oldPrice) : null,
         stars: parseFloat(form.stars) || 5,
         reviews: parseInt(form.reviews) || 0,
         stock: parseInt(form.stock) || 0,
+      };
+      const token = localStorage.getItem("bb_token");
+      const headers = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
 
       if (view === "edit") {
         const res = await fetch(`${PRODUCTS_API}/${editing._id}`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify(body),
         });
         if (!res.ok) throw new Error("Update failed");
@@ -332,7 +342,7 @@ export default function AdminProducts() {
       } else {
         const res = await fetch(PRODUCTS_API, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify(body),
         });
         if (!res.ok) throw new Error("Create failed");
@@ -350,7 +360,11 @@ export default function AdminProducts() {
   const handleDelete = async (id) => {
     setSaving(true);
     try {
-      await fetch(`${PRODUCTS_API}/${id}`, { method: "DELETE" });
+      const token = localStorage.getItem("bb_token");
+      await fetch(`${PRODUCTS_API}/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       setConfirm(null);
       showToast("Deleted!");
       load(page, search);
@@ -365,21 +379,20 @@ export default function AdminProducts() {
 
   return (
     <div className="ap-root">
-      {/* ─ Header ─ */}
+      {/* Header */}
       <div className="ap-header">
         <div>
           <h1 className="ap-header__title">🛍️ Products</h1>
           <p className="ap-header__sub">{total} products in catalog</p>
         </div>
-        {view === "list" && (
+        {view === "list" ? (
           <button
             className="ap-btn ap-btn--primary"
             onClick={() => setView("add")}
           >
             + Add Product
           </button>
-        )}
-        {view !== "list" && (
+        ) : (
           <button
             className="ap-btn ap-btn--ghost"
             onClick={() => setView("list")}
@@ -389,7 +402,7 @@ export default function AdminProducts() {
         )}
       </div>
 
-      {/* ─ Add / Edit form ─ */}
+      {/* Form */}
       {view !== "list" && (
         <div className="ap-form-wrap">
           <h2 className="ap-form-wrap__title">
@@ -415,7 +428,7 @@ export default function AdminProducts() {
         </div>
       )}
 
-      {/* ─ List ─ */}
+      {/* List */}
       {view === "list" && (
         <>
           <div className="ap-toolbar">
@@ -432,6 +445,9 @@ export default function AdminProducts() {
                 }}
               />
             </div>
+
+            {/* Same currency switcher used across the whole site */}
+            <CurrencySwitcher />
           </div>
 
           {loading ? (
@@ -451,7 +467,8 @@ export default function AdminProducts() {
                   <tr>
                     <th>Product</th>
                     <th>Category</th>
-                    <th>Price</th>
+                    <th>Price ({selected})</th>{" "}
+                    {/* ← shows active currency code */}
                     <th>Stock</th>
                     <th>Tag</th>
                     <th>Featured</th>
@@ -486,11 +503,11 @@ export default function AdminProducts() {
                       </td>
                       <td>
                         <span className="ap-table__price">
-                          ${p.price.toFixed(2)}
+                          {format(p.price)}
                         </span>
                         {p.oldPrice && (
                           <span className="ap-table__old">
-                            ${p.oldPrice.toFixed(2)}
+                            {format(p.oldPrice)}
                           </span>
                         )}
                       </td>
@@ -562,7 +579,6 @@ export default function AdminProducts() {
             </div>
           )}
 
-          {/* Pagination */}
           {pages > 1 && (
             <div className="ap-pagination">
               <button
@@ -593,7 +609,6 @@ export default function AdminProducts() {
         </>
       )}
 
-      {/* Toast */}
       {toast.msg && (
         <div className={`ap-toast ap-toast--${toast.type}`}>{toast.msg}</div>
       )}

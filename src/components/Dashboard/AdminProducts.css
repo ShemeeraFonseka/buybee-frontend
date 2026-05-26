@@ -914,3 +914,94 @@
   color: #f5a623;
   border: 1px solid rgba(245, 166, 35, 0.3);
 }
+
+/* ─── TOOLBAR CURRENCY SWITCHER ─── */
+.ap-currency-switcher {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.ap-currency-switcher__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--warm-gray);
+  white-space: nowrap;
+}
+.ap-currency-switcher__select-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+  transition: border-color 0.2s;
+}
+.ap-currency-switcher__select-wrap:focus-within {
+  border-color: var(--honey);
+}
+.ap-currency-switcher__symbol {
+  padding: 7px 10px;
+  background: var(--honey-light);
+  color: var(--honey-dark);
+  font-weight: 800;
+  font-size: 0.88rem;
+  border-right: 1.5px solid rgba(245, 166, 35, 0.2);
+  min-width: 32px;
+  text-align: center;
+}
+.ap-currency-switcher__select {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--bee-black);
+  padding: 7px 28px 7px 12px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A7D6B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+/* Responsive — stack on mobile */
+@media (max-width: 640px) {
+  .ap-toolbar {
+    flex-wrap: wrap;
+  }
+  .ap-currency-switcher {
+    margin-left: 0;
+    width: 100%;
+  }
+  .ap-currency-switcher__label {
+    display: none;
+  }
+  .ap-currency-switcher__select-wrap {
+    flex: 1;
+  }
+}
+
+/* Dark mode */
+[data-theme="dark"] .ap-currency-switcher__label {
+  color: #9a8e7f;
+}
+[data-theme="dark"] .ap-currency-switcher__select-wrap {
+  background: #1e180f;
+  border-color: rgba(245, 166, 35, 0.2);
+}
+[data-theme="dark"] .ap-currency-switcher__symbol {
+  background: rgba(245, 166, 35, 0.1);
+  color: #f5a623;
+  border-right-color: rgba(245, 166, 35, 0.15);
+}
+[data-theme="dark"] .ap-currency-switcher__select {
+  color: #f5ecd5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A8E7F' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+[data-theme="dark"] select.ap-currency-switcher__select option {
+  background: #251e14;
+  color: #f5ecd5;
+}
