@@ -19,6 +19,7 @@ import ContactPage from "./components/Contact/ContactPage";
 import AboutPage from "./components/About/AboutPage";
 
 import "./components/Theme/Theme.css";
+import AdminImport from "./components/Dashboard/AdminImport";
 
 export default function App() {
   const [cart, setCart] = useState([]);
@@ -44,11 +45,12 @@ export default function App() {
             <BrowserRouter>
               <Routes>
                 {/* Public */}
-                <Route path="/" element={<LandingPage />} />
                 <Route
-                  path="/products"
+                  path="/"
                   element={<ProductsPage cart={cart} onAddToCart={addToCart} />}
                 />
+                <Route path="/home" element={<LandingPage />} />
+
                 <Route
                   path="/checkout"
                   element={<CheckoutPage cart={cart} onClearCart={clearCart} />}
@@ -106,6 +108,15 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <POSApp />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/admin/import"
+                  element={
+                    <ProtectedRoute>
+                      <AdminImport />
                     </ProtectedRoute>
                   }
                 />

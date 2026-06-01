@@ -9,16 +9,30 @@ const imgSrc = (url) =>
   !url ? null : url.startsWith("http") ? url : `${API_BASE}${url}`;
 
 const EMPTY_FORM = {
+  /* Basic */
   title: "",
   description: "",
+  barcode: "",
+  brand: "",
+  category: "",
+  supplier: "",
+  /* Pricing */
+  costPrice: "",
   price: "",
   oldPrice: "",
-  category: "",
+  wholesalePrice: "",
+  maxDiscount: "",
+  singleDiscount: "",
+  /* Stock */
+  stock: "0",
+  stockDate: "",
+  expireDate: "",
+  warranty: "",
+  /* Display */
   tag: "",
   tagLabel: "",
   stars: "5",
   reviews: "0",
-  stock: "0",
   featured: false,
   bg: "#FDE8C8",
   image: "",
@@ -115,9 +129,19 @@ function ImageUploader({ value, onChange }) {
 }
 
 /* ─── FIELD ─── */
-function Field({ label, value, onChange, type = "text", rows, half }) {
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  rows,
+  half,
+  third,
+  placeholder,
+}) {
+  const cls = `ap-field ${half ? "ap-field--half" : ""} ${third ? "ap-field--third" : ""}`;
   return (
-    <div className={`ap-field ${half ? "ap-field--half" : ""}`}>
+    <div className={cls}>
       <label className="ap-field__label">{label}</label>
       {rows ? (
         <textarea
@@ -125,6 +149,7 @@ function Field({ label, value, onChange, type = "text", rows, half }) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           rows={rows}
+          placeholder={placeholder}
         />
       ) : (
         <input
@@ -132,33 +157,76 @@ function Field({ label, value, onChange, type = "text", rows, half }) {
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
         />
       )}
     </div>
   );
 }
 
+/* ─── SECTION HEADING ─── */
+function SectionHead({ label }) {
+  return <div className="ap-section-head">{label}</div>;
+}
+
 /* ─── PRODUCT FORM ─── */
 function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
+  const { currencies, selectedCurrency } = useCurrency();
   const [form, setForm] = useState(initial);
+  const [priceCurrency, setPriceCurrency] = useState(
+    () => localStorage.getItem("bb_currency") || "USD",
+  );
   const set = (key) => (val) => setForm((f) => ({ ...f, [key]: val }));
 
+  // Get rate for selected input currency
+  const inputCur = currencies.find((c) => c.code === priceCurrency) || {
+    code: "USD",
+    symbol: "$",
+    rateToUSD: 1,
+  };
+  const rate = inputCur.rateToUSD || 1;
+  const sym = inputCur.symbol || "$";
+
+  // Preview: convert entered value to USD for display hint
+  const toUSDHint = (v) =>
+    v ? `≈ $${(parseFloat(v) / rate).toFixed(2)} USD` : "";
+
   const handleSubmit = () => {
-    if (!form.title || !form.price || !form.category) {
-      alert("Title, price and category are required");
+    if (!form.title || !form.price) {
+      alert("Product name and sale price are required");
       return;
     }
-    onSave(form);
+    // Convert all prices to USD before saving
+    const toUSD = (v) =>
+      v ? parseFloat((parseFloat(v) / rate).toFixed(6)) : null;
+    onSave({
+      ...form,
+      price: toUSD(form.price) || 0,
+      oldPrice: toUSD(form.oldPrice),
+      costPrice: toUSD(form.costPrice),
+      wholesalePrice: toUSD(form.wholesalePrice),
+      maxDiscount: toUSD(form.maxDiscount),
+      singleDiscount: toUSD(form.singleDiscount),
+    });
   };
 
   return (
     <div className="ap-form">
       <ImageUploader value={form.image} onChange={set("image")} />
+
+      {/* ── Basic Info ── */}
+      <SectionHead label="📦 Basic Information" />
       <div className="ap-form__grid">
         <Field
-          label="Title *"
+          label="Product Name *"
           value={form.title}
           onChange={set("title")}
+          half
+        />
+        <Field
+          label="Brand Name"
+          value={form.brand}
+          onChange={set("brand")}
           half
         />
         <Field
@@ -168,38 +236,16 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
           half
         />
         <Field
-          label="Price (USD) *"
-          value={form.price}
-          onChange={set("price")}
-          type="number"
+          label="Barcode"
+          value={form.barcode}
+          onChange={set("barcode")}
           half
+          placeholder="e.g. 8901234567890"
         />
         <Field
-          label="Old Price (USD)"
-          value={form.oldPrice}
-          onChange={set("oldPrice")}
-          type="number"
-          half
-        />
-        <Field
-          label="Stock"
-          value={form.stock}
-          onChange={set("stock")}
-          type="number"
-          half
-        />
-        <Field
-          label="Reviews count"
-          value={form.reviews}
-          onChange={set("reviews")}
-          type="number"
-          half
-        />
-        <Field
-          label="Stars (0–5)"
-          value={form.stars}
-          onChange={set("stars")}
-          type="number"
+          label="Supplier Name"
+          value={form.supplier}
+          onChange={set("supplier")}
           half
         />
 
@@ -221,6 +267,192 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
           label="Tag Label (e.g. 🔥 Hot)"
           value={form.tagLabel}
           onChange={set("tagLabel")}
+          half
+        />
+
+        <div className="ap-field ap-field--full">
+          <label className="ap-field__label">Description</label>
+          <textarea
+            className="ap-field__input ap-field__input--textarea"
+            value={form.description}
+            onChange={(e) => set("description")(e.target.value)}
+            rows={3}
+          />
+        </div>
+      </div>
+
+      {/* ── Pricing ── */}
+      <SectionHead label="💰 Pricing" />
+      <div className="ap-form__grid">
+        {/* Currency selector */}
+        <div className="ap-field ap-field--full">
+          <label className="ap-field__label">Enter prices in</label>
+          <div className="ap-price-currency-row">
+            <select
+              className="ap-field__input ap-price-currency-select"
+              value={priceCurrency}
+              onChange={(e) => setPriceCurrency(e.target.value)}
+            >
+              {currencies.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.code} — {c.name} ({c.symbol})
+                </option>
+              ))}
+            </select>
+            {priceCurrency !== "USD" && (
+              <span className="ap-price-currency-hint">
+                → stored as USD automatically
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="ap-field ap-field--third">
+          <label className="ap-field__label">Cost Price ({sym})</label>
+          <input
+            className="ap-field__input"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.costPrice}
+            onChange={(e) => set("costPrice")(e.target.value)}
+            placeholder="What you paid"
+          />
+          {priceCurrency !== "USD" && form.costPrice && (
+            <div className="ap-currency-hint">{toUSDHint(form.costPrice)}</div>
+          )}
+        </div>
+        <div className="ap-field ap-field--third">
+          <label className="ap-field__label">Sale Price ({sym}) *</label>
+          <input
+            className="ap-field__input"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.price}
+            onChange={(e) => set("price")(e.target.value)}
+            placeholder="Public price"
+          />
+          {priceCurrency !== "USD" && form.price && (
+            <div className="ap-currency-hint">{toUSDHint(form.price)}</div>
+          )}
+        </div>
+        <div className="ap-field ap-field--third">
+          <label className="ap-field__label">Old / Compare Price ({sym})</label>
+          <input
+            className="ap-field__input"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.oldPrice}
+            onChange={(e) => set("oldPrice")(e.target.value)}
+            placeholder="Crossed-out price"
+          />
+          {priceCurrency !== "USD" && form.oldPrice && (
+            <div className="ap-currency-hint">{toUSDHint(form.oldPrice)}</div>
+          )}
+        </div>
+        <div className="ap-field ap-field--third">
+          <label className="ap-field__label">Wholesale Price ({sym})</label>
+          <input
+            className="ap-field__input"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.wholesalePrice}
+            onChange={(e) => set("wholesalePrice")(e.target.value)}
+            placeholder="Bulk buyer price"
+          />
+          {priceCurrency !== "USD" && form.wholesalePrice && (
+            <div className="ap-currency-hint">
+              {toUSDHint(form.wholesalePrice)}
+            </div>
+          )}
+        </div>
+        <div className="ap-field ap-field--third">
+          <label className="ap-field__label">Max Discount ({sym})</label>
+          <input
+            className="ap-field__input"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.maxDiscount}
+            onChange={(e) => set("maxDiscount")(e.target.value)}
+            placeholder="Max discount allowed"
+          />
+          {priceCurrency !== "USD" && form.maxDiscount && (
+            <div className="ap-currency-hint">
+              {toUSDHint(form.maxDiscount)}
+            </div>
+          )}
+        </div>
+        <div className="ap-field ap-field--third">
+          <label className="ap-field__label">Single Discount ({sym})</label>
+          <input
+            className="ap-field__input"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.singleDiscount}
+            onChange={(e) => set("singleDiscount")(e.target.value)}
+            placeholder="Per-item discount"
+          />
+          {priceCurrency !== "USD" && form.singleDiscount && (
+            <div className="ap-currency-hint">
+              {toUSDHint(form.singleDiscount)}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Stock ── */}
+      <SectionHead label="📋 Stock & Inventory" />
+      <div className="ap-form__grid">
+        <Field
+          label="Quantity / Stock"
+          value={form.stock}
+          onChange={set("stock")}
+          type="number"
+          half
+        />
+        <Field
+          label="Warranty"
+          value={form.warranty}
+          onChange={set("warranty")}
+          half
+          placeholder="e.g. 1 Year, 6 Months"
+        />
+        <Field
+          label="Stock Date"
+          value={form.stockDate}
+          onChange={set("stockDate")}
+          type="date"
+          half
+        />
+        <Field
+          label="Expire Date"
+          value={form.expireDate}
+          onChange={set("expireDate")}
+          type="date"
+          half
+        />
+      </div>
+
+      {/* ── Display ── */}
+      <SectionHead label="🎨 Display Settings" />
+      <div className="ap-form__grid">
+        <Field
+          label="Stars (0–5)"
+          value={form.stars}
+          onChange={set("stars")}
+          type="number"
+          half
+        />
+        <Field
+          label="Reviews Count"
+          value={form.reviews}
+          onChange={set("reviews")}
+          type="number"
           half
         />
 
@@ -250,13 +482,6 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
         </div>
       </div>
 
-      <Field
-        label="Description"
-        value={form.description}
-        onChange={set("description")}
-        rows={3}
-      />
-
       <div className="ap-form__actions">
         <button className="ap-btn ap-btn--ghost" onClick={onCancel}>
           Cancel
@@ -275,7 +500,7 @@ function ProductForm({ initial = EMPTY_FORM, onSave, onCancel, saving }) {
 
 /* ─── ROOT ─── */
 export default function AdminProducts() {
-  const { format, selected } = useCurrency(); // ← get format + selected currency from context
+  const { format, selected } = useCurrency();
 
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
@@ -321,10 +546,21 @@ export default function AdminProducts() {
         ...form,
         price: parseFloat(form.price) || 0,
         oldPrice: form.oldPrice ? parseFloat(form.oldPrice) : null,
+        costPrice: form.costPrice ? parseFloat(form.costPrice) : null,
+        wholesalePrice: form.wholesalePrice
+          ? parseFloat(form.wholesalePrice)
+          : null,
+        maxDiscount: form.maxDiscount ? parseFloat(form.maxDiscount) : null,
+        singleDiscount: form.singleDiscount
+          ? parseFloat(form.singleDiscount)
+          : null,
         stars: parseFloat(form.stars) || 5,
         reviews: parseInt(form.reviews) || 0,
         stock: parseInt(form.stock) || 0,
+        stockDate: form.stockDate || null,
+        expireDate: form.expireDate || null,
       };
+
       const token = localStorage.getItem("bb_token");
       const headers = {
         "Content-Type": "application/json",
@@ -375,7 +611,31 @@ export default function AdminProducts() {
     }
   };
 
+  /* Helper: format editing product back to form strings */
+  const toFormStr = (p) => ({
+    ...p,
+    price: p.price?.toString() ?? "",
+    oldPrice: p.oldPrice?.toString() ?? "",
+    costPrice: p.costPrice?.toString() ?? "",
+    wholesalePrice: p.wholesalePrice?.toString() ?? "",
+    maxDiscount: p.maxDiscount?.toString() ?? "",
+    singleDiscount: p.singleDiscount?.toString() ?? "",
+    stars: p.stars?.toString() ?? "5",
+    reviews: p.reviews?.toString() ?? "0",
+    stock: p.stock?.toString() ?? "0",
+    stockDate: p.stockDate ? p.stockDate.slice(0, 10) : "",
+    expireDate: p.expireDate ? p.expireDate.slice(0, 10) : "",
+  });
+
   const pages = Math.ceil(total / LIMIT);
+
+  /* Check if product is expiring soon (within 30 days) */
+  const isExpiringSoon = (dateStr) => {
+    if (!dateStr) return false;
+    const diff = new Date(dateStr) - new Date();
+    return diff > 0 && diff < 30 * 24 * 60 * 60 * 1000;
+  };
+  const isExpired = (dateStr) => dateStr && new Date(dateStr) < new Date();
 
   return (
     <div className="ap-root">
@@ -409,18 +669,7 @@ export default function AdminProducts() {
             {view === "edit" ? "Edit Product" : "New Product"}
           </h2>
           <ProductForm
-            initial={
-              view === "edit"
-                ? {
-                    ...editing,
-                    price: editing.price?.toString() ?? "",
-                    oldPrice: editing.oldPrice?.toString() ?? "",
-                    stars: editing.stars?.toString() ?? "5",
-                    reviews: editing.reviews?.toString() ?? "0",
-                    stock: editing.stock?.toString() ?? "0",
-                  }
-                : EMPTY_FORM
-            }
+            initial={view === "edit" ? toFormStr(editing) : EMPTY_FORM}
             onSave={handleSave}
             onCancel={() => setView("list")}
             saving={saving}
@@ -445,8 +694,6 @@ export default function AdminProducts() {
                 }}
               />
             </div>
-
-            {/* Same currency switcher used across the whole site */}
             <CurrencySwitcher />
           </div>
 
@@ -466,12 +713,12 @@ export default function AdminProducts() {
                 <thead>
                   <tr>
                     <th>Product</th>
-                    <th>Category</th>
-                    <th>Price ({selected})</th>{" "}
-                    {/* ← shows active currency code */}
+                    <th>Brand / Supplier</th>
+                    <th>Sale Price ({selected})</th>
+                    <th>Cost ({selected})</th>
                     <th>Stock</th>
+                    <th>Expire</th>
                     <th>Tag</th>
-                    <th>Featured</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -493,13 +740,24 @@ export default function AdminProducts() {
                           <div>
                             <div className="ap-table__name">{p.title}</div>
                             <div className="ap-table__sub">
+                              {p.barcode && (
+                                <span className="ap-table__barcode">
+                                  #{p.barcode}
+                                </span>
+                              )}{" "}
                               {"★".repeat(Math.round(p.stars))} ({p.reviews})
                             </div>
                           </div>
                         </div>
                       </td>
                       <td>
-                        <span className="ap-table__cat">{p.category}</span>
+                        <div
+                          className="ap-table__name"
+                          style={{ fontSize: "0.82rem" }}
+                        >
+                          {p.brand || "—"}
+                        </div>
+                        <div className="ap-table__sub">{p.supplier || ""}</div>
                       </td>
                       <td>
                         <span className="ap-table__price">
@@ -512,11 +770,34 @@ export default function AdminProducts() {
                         )}
                       </td>
                       <td>
+                        <span className="ap-table__cat">
+                          {p.costPrice ? format(p.costPrice) : "—"}
+                        </span>
+                      </td>
+                      <td>
                         <span
                           className={`ap-table__stock ${p.stock === 0 ? "ap-table__stock--out" : ""}`}
                         >
                           {p.stock === 0 ? "Out" : p.stock}
                         </span>
+                      </td>
+                      <td>
+                        {p.expireDate ? (
+                          <span
+                            className={`ap-expire-badge ${isExpired(p.expireDate) ? "ap-expire-badge--expired" : isExpiringSoon(p.expireDate) ? "ap-expire-badge--soon" : "ap-expire-badge--ok"}`}
+                          >
+                            {isExpired(p.expireDate)
+                              ? "⛔ Expired"
+                              : isExpiringSoon(p.expireDate)
+                                ? "⚠️ Soon"
+                                : "✓ OK"}
+                            <span className="ap-expire-badge__date">
+                              {new Date(p.expireDate).toLocaleDateString()}
+                            </span>
+                          </span>
+                        ) : (
+                          <span className="ap-table__cat">—</span>
+                        )}
                       </td>
                       <td>
                         {p.tag ? (
@@ -526,13 +807,6 @@ export default function AdminProducts() {
                         ) : (
                           <span className="ap-badge ap-badge--none">—</span>
                         )}
-                      </td>
-                      <td>
-                        <span
-                          className={`ap-table__featured ${p.featured ? "ap-table__featured--yes" : ""}`}
-                        >
-                          {p.featured ? "✓ Yes" : "—"}
-                        </span>
                       </td>
                       <td>
                         <div className="ap-table__actions">

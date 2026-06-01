@@ -20,17 +20,12 @@ function Navbar() {
       <Logo />
       <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
         <li>
-          <a href="/" onClick={() => setMenuOpen(false)}>
-            Home
-          </a>
-        </li>
-        <li>
           <a href="/about" onClick={() => setMenuOpen(false)}>
             About Us
           </a>
         </li>
         <li>
-          <a href="/products" onClick={() => setMenuOpen(false)}>
+          <a href="/" onClick={() => setMenuOpen(false)}>
             Products
           </a>
         </li>
