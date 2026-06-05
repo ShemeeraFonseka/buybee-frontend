@@ -2,8 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useSite } from "../LandingPage/SiteContext";
 import { useAuth } from "../Auth/AuthContext";
 import "./AdminDashboard.css";
-import { useTheme } from "../Theme/ThemeContext";
-import ThemeToggle from "../Theme/ThemeToggle";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
@@ -1247,6 +1245,162 @@ function AboutEditor({ showToast }) {
   );
 }
 
+/* ════════════════════════════════════════════
+   OUT OF STOCK EDITOR
+   ════════════════════════════════════════════ */
+function OutOfStockEditor({ lowStock, onReload }) {
+  const [filter, setFilter] = useState("all"); // all | oos | low
+  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(null); // { id, stock }
+  const [toast, setToast] = useState("");
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 3000);
+  };
+
+  const filtered = lowStock.filter((p) => {
+    if (filter === "oos") return p.stock === 0;
+    if (filter === "low") return p.stock > 0;
+    return true;
+  });
+
+  const handleUpdateStock = async (id, newStock) => {
+    setSaving(true);
+    try {
+      const token = localStorage.getItem("bb_token");
+      const res = await fetch(`${API_BASE}/api/products/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ stock: parseInt(newStock) || 0 }),
+      });
+      if (!res.ok) throw new Error("Update failed");
+      setEditing(null);
+      onReload();
+      showToast("Stock updated!");
+    } catch (e) {
+      showToast("Failed: " + e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const oosCount = lowStock.filter((p) => p.stock === 0).length;
+  const lowCount = lowStock.filter((p) => p.stock > 0).length;
+
+  return (
+    <div className="ad-oos-root">
+      {/* Summary cards */}
+      <div className="ad-oos-summary">
+        <div
+          className={`ad-oos-card ad-oos-card--red ${filter === "oos" ? "ad-oos-card--active" : ""}`}
+          onClick={() => setFilter(filter === "oos" ? "all" : "oos")}
+        >
+          <div className="ad-oos-card__num">{oosCount}</div>
+          <div className="ad-oos-card__label">Out of Stock</div>
+        </div>
+        <div
+          className={`ad-oos-card ad-oos-card--orange ${filter === "low" ? "ad-oos-card--active" : ""}`}
+          onClick={() => setFilter(filter === "low" ? "all" : "low")}
+        >
+          <div className="ad-oos-card__num">{lowCount}</div>
+          <div className="ad-oos-card__label">Low Stock (≤10)</div>
+        </div>
+        <div
+          className={`ad-oos-card ad-oos-card--gray ${filter === "all" ? "ad-oos-card--active" : ""}`}
+          onClick={() => setFilter("all")}
+        >
+          <div className="ad-oos-card__num">{lowStock.length}</div>
+          <div className="ad-oos-card__label">Total Affected</div>
+        </div>
+      </div>
+
+      {/* Product list */}
+      <div className="ad-oos-list">
+        {filtered.length === 0 ? (
+          <div className="ad-oos-empty">
+            <div style={{ fontSize: "2.5rem" }}>✅</div>
+            <p>No products in this category</p>
+          </div>
+        ) : (
+          filtered.map((p) => (
+            <div
+              key={p._id}
+              className={`ad-oos-item ${p.stock === 0 ? "ad-oos-item--oos" : "ad-oos-item--low"}`}
+            >
+              <div
+                className="ad-oos-item__img"
+                style={{ background: p.bg || "#FDE8C8" }}
+              >
+                {p.image ? (
+                  <img
+                    src={
+                      p.image.startsWith("http")
+                        ? p.image
+                        : `${API_BASE}${p.image}`
+                    }
+                    alt={p.title}
+                  />
+                ) : (
+                  "🛍️"
+                )}
+              </div>
+              <div className="ad-oos-item__info">
+                <div className="ad-oos-item__name">{p.title}</div>
+                <div className="ad-oos-item__cat">{p.category || "—"}</div>
+              </div>
+              <div
+                className={`ad-oos-item__badge ${p.stock === 0 ? "ad-oos-item__badge--oos" : "ad-oos-item__badge--low"}`}
+              >
+                {p.stock === 0 ? "⛔ Out of Stock" : `⚠️ ${p.stock} left`}
+              </div>
+              {editing?.id === p._id ? (
+                <div className="ad-oos-item__edit">
+                  <input
+                    className="ad-oos-item__input"
+                    type="number"
+                    min="0"
+                    value={editing.stock}
+                    onChange={(e) =>
+                      setEditing((v) => ({ ...v, stock: e.target.value }))
+                    }
+                    autoFocus
+                  />
+                  <button
+                    className="ad-btn ad-btn--primary ad-btn--sm"
+                    onClick={() => handleUpdateStock(p._id, editing.stock)}
+                    disabled={saving}
+                  >
+                    {saving ? "…" : "✓"}
+                  </button>
+                  <button
+                    className="ad-btn ad-btn--ghost ad-btn--sm"
+                    onClick={() => setEditing(null)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="ad-btn ad-btn--ghost ad-btn--sm"
+                  onClick={() => setEditing({ id: p._id, stock: p.stock })}
+                >
+                  ✏️ Update Stock
+                </button>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+
+      {toast && <div className="ad-toast ad-toast--success">{toast}</div>}
+    </div>
+  );
+}
+
 /* ─── SECTION CONFIGS ─── */
 const SECTION_CONFIG = {
   stats: {
@@ -1325,7 +1479,7 @@ export default function AdminDashboard() {
   const [lowStock, setLowStock] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/products/low-stock?threshold=5`)
+    fetch(`${API_BASE}/api/products/low-stock?threshold=10`)
       .then((r) => r.json())
       .then((data) => setLowStock(Array.isArray(data) ? data : []))
       .catch(() => {});
@@ -1412,48 +1566,20 @@ export default function AdminDashboard() {
               site.
             </p>
           </div>
-          <ThemeToggle />
         </div>
 
-        {lowStock.length > 0 && (
-          <div className="ad-low-stock-alert">
+        {lowStock.length > 0 && activeSection !== "outofstock" && (
+          <div
+            className="ad-low-stock-alert ad-low-stock-alert--banner"
+            onClick={() => setActiveSection("outofstock")}
+            style={{ cursor: "pointer" }}
+          >
             <div className="ad-low-stock-alert__header">
               <span>
-                ⚠️ Low Stock Alert — {lowStock.length} product
-                {lowStock.length !== 1 ? "s" : ""} running low
+                ⚠️ {lowStock.filter((p) => p.stock === 0).length} out of stock ·{" "}
+                {lowStock.filter((p) => p.stock > 0).length} low stock
               </span>
-              <a href="/admin/products" className="ad-low-stock-alert__link">
-                Manage stock →
-              </a>
-            </div>
-            <div className="ad-low-stock-alert__items">
-              {lowStock.map((p) => (
-                <div key={p._id} className="ad-low-stock-alert__item">
-                  <div
-                    className="ad-low-stock-alert__img"
-                    style={{ background: p.bg || "#FDE8C8" }}
-                  >
-                    {p.image ? (
-                      <img
-                        src={
-                          p.image.startsWith("http")
-                            ? p.image
-                            : `${API_BASE}${p.image}`
-                        }
-                        alt={p.title}
-                      />
-                    ) : (
-                      "🛍️"
-                    )}
-                  </div>
-                  <div className="ad-low-stock-alert__name">{p.title}</div>
-                  <div
-                    className={`ad-low-stock-alert__qty ${p.stock === 0 ? "ad-low-stock-alert__qty--oos" : ""}`}
-                  >
-                    {p.stock === 0 ? "Out of stock" : `${p.stock} left`}
-                  </div>
-                </div>
-              ))}
+              <span className="ad-low-stock-alert__link">View details →</span>
             </div>
           </div>
         )}
@@ -1510,6 +1636,16 @@ export default function AdminDashboard() {
             <ContactEditor showToast={showToast} />
           )}
           {activeSection === "about" && <AboutEditor showToast={showToast} />}
+          {activeSection === "outofstock" && (
+            <OutOfStockEditor
+              lowStock={lowStock}
+              onReload={() =>
+                fetch(`${API_BASE}/api/products/low-stock?threshold=10`)
+                  .then((r) => r.json())
+                  .then((d) => setLowStock(Array.isArray(d) ? d : []))
+              }
+            />
+          )}
         </div>
       </main>
 
