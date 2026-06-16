@@ -29,13 +29,9 @@ function useReveal() {
 /* ─── NAV ─── */
 function Logo({ dark = false }) {
   return (
-    <a
-      href="/"
-      className="nav__logo"
-      style={dark ? { color: "var(--white)" } : {}}
-    >
-      <div className="nav__logo-icon">🐝</div>
-      BuyBee
+    <a href="/" className="ab-logo" style={dark ? { color: "#F5ECD5" } : {}}>
+      <img src="/logo.png" alt="Sapumal Stores" className="ab-logo__icon" />
+      Sapumal Stores
     </a>
   );
 }
@@ -74,7 +70,7 @@ function Navbar() {
         </li>
         <li>
           <a
-            href="/products"
+            href="/"
             className="nav__cta"
             style={{ textDecoration: "none", display: "inline-block" }}
           >

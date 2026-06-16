@@ -110,7 +110,7 @@ function ImageUploader({ value, onChange }) {
               <div className="ap-dropzone__icon">📷</div>
               <div className="ap-dropzone__text">Click or drag image here</div>
               <div className="ap-dropzone__hint">
-                JPEG, PNG, WebP · max 5 MB
+                All image formats · max 5 MB
               </div>
             </>
           )}

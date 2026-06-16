@@ -17,12 +17,12 @@ const starStr = (n) =>
 /* ─── LOGO ─── */
 function Logo({ dark = false }) {
   return (
-    <a href="/" className="nav__logo" style={dark ? { color: "#F5ECD5" } : {}}>
-      <div className="nav__logo-icon">🐝</div>BuyBee
+    <a href="/" className="ab-logo" style={dark ? { color: "#F5ECD5" } : {}}>
+      <img src="/logo.png" alt="Sapumal Stores" className="ab-logo__icon" />
+      Sapumal Stores
     </a>
   );
 }
-
 /* ─── NAVBAR ─── */
 function Navbar({ cartCount, onCartOpen }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,7 +31,7 @@ function Navbar({ cartCount, onCartOpen }) {
       <Logo />
       <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
         <li>
-          <a href="/" onClick={() => setMenuOpen(false)}>
+          <a href="/home" onClick={() => setMenuOpen(false)}>
             Home
           </a>
         </li>

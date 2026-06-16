@@ -552,3 +552,12 @@
 [data-theme="dark"] .cp-full-footer__bottom a {
   color: var(--honey);
 }
+
+.ab-logo__icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 0;
+  display: block;
+  flex-shrink: 0;
+}

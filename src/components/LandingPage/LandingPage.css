@@ -1924,3 +1924,12 @@ body {
 [data-theme="dark"] .showcase__badge-sub {
   color: rgba(245, 236, 213, 0.5);
 }
+
+.ab-logo__icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 0;
+  display: block;
+  flex-shrink: 0;
+}

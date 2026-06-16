@@ -7,8 +7,9 @@ const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
 function Logo({ dark = false }) {
   return (
-    <a href="/" className="nav__logo" style={dark ? { color: "#F5ECD5" } : {}}>
-      <div className="nav__logo-icon">🐝</div>BuyBee
+    <a href="/" className="ab-logo" style={dark ? { color: "#F5ECD5" } : {}}>
+      <img src="/logo.png" alt="Sapumal Stores" className="ab-logo__icon" />
+      Sapumal Stores
     </a>
   );
 }
@@ -19,6 +20,11 @@ function Navbar() {
     <nav className="nav">
       <Logo />
       <ul className={`nav__links ${menuOpen ? "nav__links--open" : ""}`}>
+        <li>
+          <a href="/home" onClick={() => setMenuOpen(false)}>
+            Home
+          </a>
+        </li>
         <li>
           <a href="/about" onClick={() => setMenuOpen(false)}>
             About Us
@@ -42,7 +48,7 @@ function Navbar() {
         </li>
         <li>
           <a
-            href="/products"
+            href="/"
             className="nav__cta"
             style={{ textDecoration: "none", display: "inline-block" }}
           >
