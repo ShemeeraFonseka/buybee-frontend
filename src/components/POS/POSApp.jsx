@@ -1169,6 +1169,7 @@ export default function POSApp() {
             {paginated.map((p) => {
               const oos = p.stock !== undefined && p.stock <= 0;
               const src = p.image ? imgSrc(p.image) : null;
+              const inCart = cart.find((c) => c._id === p._id);
               return (
                 <button
                   key={p._id}
@@ -1176,6 +1177,9 @@ export default function POSApp() {
                   onClick={() => addToCart(p)}
                   disabled={oos}
                 >
+                  {inCart && (
+                    <div className="pos-product__badge">{inCart.qty}</div>
+                  )}
                   <div
                     className="pos-product__img"
                     style={{ background: p.bg || "#FDE8C8" }}
@@ -1306,47 +1310,56 @@ export default function POSApp() {
                 )}
               </div>
             ) : (
-              cart.map((item) => (
-                <div key={item._id} className="pos-cart__item">
-                  <div className="pos-cart__item-info">
-                    <div className="pos-cart__item-title">{item.title}</div>
-                    <div className="pos-cart__item-price">
-                      {fmt(item.price)} each
-                      {item.stock !== undefined && (
-                        <span
-                          className={`pos-cart__item-stock ${item.stock <= item.qty ? "pos-cart__item-stock--warn" : ""}`}
-                        >
-                          &nbsp;· {item.stock} in stock
-                        </span>
-                      )}
+              cart.map((item) => {
+                const cartSrc = item.image ? imgSrc(item.image) : null;
+                return (
+                  <div key={item._id} className="pos-cart__item">
+                    <div
+                      className="pos-cart__item-thumb"
+                      style={{ background: item.bg || "#FDE8C8" }}
+                    >
+                      {cartSrc ? <img src={cartSrc} alt={item.title} /> : "🛍️"}
                     </div>
-                  </div>
-                  <div className="pos-cart__item-controls">
+                    <div className="pos-cart__item-info">
+                      <div className="pos-cart__item-title">{item.title}</div>
+                      <div className="pos-cart__item-price">
+                        {fmt(item.price)} each
+                        {item.stock !== undefined && (
+                          <span
+                            className={`pos-cart__item-stock ${item.stock <= item.qty ? "pos-cart__item-stock--warn" : ""}`}
+                          >
+                            &nbsp;· {item.stock} in stock
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="pos-cart__item-controls">
+                      <button
+                        className="pos-qty-btn"
+                        onClick={() => updateQty(item._id, item.qty - 1)}
+                      >
+                        −
+                      </button>
+                      <span className="pos-cart__item-qty">{item.qty}</span>
+                      <button
+                        className="pos-qty-btn"
+                        onClick={() => updateQty(item._id, item.qty + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className="pos-cart__item-total">
+                      {fmt(item.price * item.qty)}
+                    </div>
                     <button
-                      className="pos-qty-btn"
-                      onClick={() => updateQty(item._id, item.qty - 1)}
+                      className="pos-cart__item-remove"
+                      onClick={() => updateQty(item._id, 0)}
                     >
-                      −
-                    </button>
-                    <span className="pos-cart__item-qty">{item.qty}</span>
-                    <button
-                      className="pos-qty-btn"
-                      onClick={() => updateQty(item._id, item.qty + 1)}
-                    >
-                      +
+                      ✕
                     </button>
                   </div>
-                  <div className="pos-cart__item-total">
-                    {fmt(item.price * item.qty)}
-                  </div>
-                  <button
-                    className="pos-cart__item-remove"
-                    onClick={() => updateQty(item._id, 0)}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
           <div className="pos-cart__footer">
